@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résultats · Finances personnelles, votre vision et vos besoins</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #0f1f3d;
+  --navy2:   #1a3358;
+  --gold:    #c8a96e;
+  --gold-lt: #e8d5a3;
+  --cream:   #faf8f4;
+  --cream2:  #f0ece4;
+  --text:    #1e1e2e;
+  --muted:   #6b6b84;
+  --border:  #e0dbd0;
+  --green:   #1e7c5a;
+  --green-bg:#e6f5ef;
+  --blue:    #1a4fa0;
+  --blue-bg: #eaf0fb;
+  --amber:   #c05b1a;
+  --amber-bg:#fef1e8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); line-height:1.6; }
+
+.hero { background:var(--navy); position:relative; overflow:hidden; }
+.hero::after {
+  content:''; position:absolute; top:-80px; right:-100px;
+  width:420px; height:420px;
+  background:radial-gradient(circle, rgba(200,169,110,.14) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hero::before {
+  content:''; position:absolute; bottom:-60px; left:-60px;
+  width:280px; height:280px;
+  background:radial-gradient(circle, rgba(26,79,160,.16) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hero-inner { max-width:680px; margin:0 auto; padding:60px 32px 52px; position:relative; z-index:1; }
+.kicker {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(200,169,110,.13); border:1px solid rgba(200,169,110,.28);
+  color:var(--gold-lt); font-size:10.5px; font-weight:600;
+  letter-spacing:1.6px; text-transform:uppercase;
+  padding:5px 13px; border-radius:20px; margin-bottom:26px;
+}
+.kicker::before { content:'◆'; font-size:7px; color:var(--gold); }
+.hero h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,5.5vw,42px); font-weight:700; color:#fff;
+  line-height:1.18; margin-bottom:14px;
+}
+.hero h1 em { font-style:italic; color:var(--gold-lt); }
+.hero-rule { width:48px; height:2px; background:var(--gold); border-radius:2px; margin:22px 0; }
+.hero-sub { font-size:15px; font-weight:300; color:rgba(255,255,255,.55); max-width:460px; line-height:1.7; }
+
+.sticky-nav { background:#fff; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.sticky-nav-inner {
+  max-width:680px; margin:0 auto; padding:0 32px;
+  display:flex; overflow-x:auto; scrollbar-width:none;
+}
+.sticky-nav-inner::-webkit-scrollbar { display:none; }
+.nav-a {
+  font-size:11.5px; font-weight:600; letter-spacing:.3px;
+  color:var(--muted); text-decoration:none; white-space:nowrap;
+  padding:13px 10px; border-bottom:2px solid transparent;
+  transition:color .15s, border-color .15s;
+}
+.nav-a:hover { color:var(--navy); border-bottom-color:var(--gold); }
+
+.wrap { max-width:680px; margin:0 auto; padding:0 32px 80px; }
+
+.sec { padding-top:60px; }
+.sec-eyebrow {
+  font-size:10.5px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:9px;
+  display:flex; align-items:center; gap:8px;
+}
+.sec-eyebrow::before { content:''; width:18px; height:2px; background:var(--gold); border-radius:2px; }
+.sec h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,4vw,29px); font-weight:700; color:var(--navy);
+  line-height:1.22; margin-bottom:8px;
+}
+.sec-lead { font-size:14.5px; color:var(--muted); line-height:1.75; margin-bottom:28px; max-width:560px; }
+
+.card {
+  background:#fff; border:1px solid var(--border); border-radius:14px;
+  padding:24px 26px; margin-bottom:12px;
+}
+.card-dark { background:var(--navy); border-color:var(--navy); }
+.card-dark p { color:rgba(255,255,255,.6) !important; }
+.card-dark p strong { color:#fff !important; }
+.card p { font-size:14.5px; color:var(--muted); line-height:1.75; }
+.card p strong { color:var(--text); font-weight:600; }
+.card p + p { margin-top:10px; }
+.card-label {
+  font-size:10.5px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:16px;
+}
+
+.dark-quote {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(17px,3vw,21px); font-weight:700; color:#fff;
+  line-height:1.3; margin-bottom:14px;
+}
+.dark-quote em { font-style:italic; color:var(--gold-lt); }
+
+.big-n-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px; }
+.big-n-cell {
+  background:#fff; border:1px solid var(--border); border-radius:12px;
+  padding:20px 14px; text-align:center;
+}
+.big-n {
+  font-family:'Playfair Display',serif;
+  font-size:36px; font-weight:700; color:var(--navy); line-height:1;
+}
+.big-n-label { font-size:12px; color:var(--muted); margin-top:5px; line-height:1.4; }
+
+.bars { display:flex; flex-direction:column; gap:11px; }
+.bar-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px; }
+.bar-name { font-size:13.5px; font-weight:500; color:var(--text); padding-right:10px; }
+.bar-val {
+  font-family:'Playfair Display',serif;
+  font-size:14px; font-weight:700; color:var(--navy); flex-shrink:0;
+}
+.bar-track { height:7px; background:var(--cream2); border-radius:6px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:6px; background:linear-gradient(90deg,var(--gold),#b8860b); }
+.bar-fill.g { background:var(--navy); }
+.bar-fill.gr { background:linear-gradient(90deg,var(--green),#27ae60); }
+
+.donut-layout { display:flex; gap:24px; align-items:center; flex-wrap:wrap; }
+.donut-svg-wrap { position:relative; width:120px; height:120px; flex-shrink:0; }
+.donut-svg-wrap svg { width:100%; height:100%; transform:rotate(-90deg); }
+.donut-center {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+}
+.donut-center-n {
+  font-family:'Playfair Display',serif;
+  font-size:24px; font-weight:700; color:var(--navy); line-height:1;
+}
+.donut-center-sub { font-size:9px; color:var(--muted); text-align:center; line-height:1.3; margin-top:2px; }
+.donut-leg { flex:1; display:flex; flex-direction:column; gap:9px; }
+.leg-row { display:flex; align-items:center; gap:9px; }
+.leg-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.leg-text { font-size:13px; color:var(--muted); }
+.leg-text strong { color:var(--text); font-weight:600; }
+
+.callout {
+  display:flex; gap:12px; align-items:flex-start;
+  border-radius:12px; padding:15px 17px; margin:12px 0;
+}
+.callout.green { background:var(--green-bg); border:1px solid #b3dece; }
+.callout.amber { background:var(--amber-bg); border:1px solid #f5c9a3; }
+.callout.blue  { background:var(--blue-bg);  border:1px solid #b8cef0; }
+.callout-ico { font-size:17px; flex-shrink:0; margin-top:1px; }
+.callout p { font-size:13.5px; color:var(--text); line-height:1.65; }
+.callout p strong { font-weight:600; }
+
+.verbatim {
+  border-left:3px solid var(--gold); padding:11px 17px;
+  background:#fff; border-radius:0 10px 10px 0; margin:8px 0;
+}
+.verbatim p { font-size:13.5px; font-style:italic; color:var(--muted); line-height:1.65; }
+
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.g2 .card { margin-bottom:0; }
+
+.tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
+.tag {
+  background:var(--cream2); border:1px solid var(--border);
+  color:var(--navy2); font-size:12px; font-weight:500;
+  padding:5px 12px; border-radius:20px;
+}
+.tag.dark { background:var(--navy); color:var(--gold-lt); border-color:var(--navy); }
+
+.timeline { display:flex; flex-direction:column; }
+.tl-item { display:flex; gap:14px; padding-bottom:20px; }
+.tl-item:last-child { padding-bottom:0; }
+.tl-left { display:flex; flex-direction:column; align-items:center; }
+.tl-dot { width:10px; height:10px; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:5px; }
+.tl-line { flex:1; width:1px; background:var(--border); margin-top:4px; }
+.tl-item:last-child .tl-line { display:none; }
+.tl-title { font-size:14px; font-weight:600; color:var(--navy); margin-bottom:3px; }
+.tl-desc { font-size:13px; color:var(--muted); line-height:1.6; }
+
+.cta-block {
+  background:var(--navy); border-radius:16px;
+  padding:44px 36px; text-align:center; margin-top:64px;
+  position:relative; overflow:hidden;
+}
+.cta-block::after {
+  content:''; position:absolute; top:-50px; right:-50px;
+  width:280px; height:280px;
+  background:radial-gradient(circle,rgba(200,169,110,.13) 0%,transparent 65%);
+}
+.cta-block > * { position:relative; z-index:1; }
+.cta-block h3 {
+  font-family:'Playfair Display',serif;
+  font-size:25px; font-weight:700; color:#fff; margin-bottom:11px;
+}
+.cta-block p { font-size:14.5px; color:rgba(255,255,255,.55); max-width:400px; margin:0 auto 26px; line-height:1.7; }
+.cta-btn {
+  display:inline-block; background:var(--gold); color:var(--navy);
+  font-size:14px; font-weight:700; padding:14px 32px; border-radius:9px;
+  text-decoration:none; letter-spacing:.3px;
+}
+.cta-sub { margin-top:12px; font-size:11.5px; color:rgba(255,255,255,.3); }
+
+.footer { border-top:1px solid var(--border); margin-top:48px; padding-top:22px; text-align:center; }
+.footer p { font-size:11.5px; color:#bbb; line-height:1.7; }
+
+@media(max-width:520px){
+  .hero-inner,.wrap { padding-left:18px; padding-right:18px; }
+  .sticky-nav-inner { padding:0 18px; }
+  .big-n-row,.g2 { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="kicker">Questionnaire · Finances personnelles, votre vision et vos besoins</span>
+    <h1>Résultats du questionnaire sur ce que vous pensez <em>de vos finances personnelles.</em></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">Merci d'avoir pris le temps de répondre. Voici ce que j'ai appris, et ce que ça m'a confirmé.</p>
+  </div>
+</header>
+
+<nav class="sticky-nav">
+  <div class="sticky-nav-inner">
+    <a class="nav-a" href="#portrait">Qui vous êtes</a>
+    <a class="nav-a" href="#preoccupations">Ce qui vous préoccupe</a>
+    <a class="nav-a" href="#blocages">Ce qui vous bloque</a>
+    <a class="nav-a" href="#conseiller">Ce que vous attendez</a>
+    <a class="nav-a" href="#quand">Le bon moment</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- 01 PORTRAIT -->
+<section class="sec" id="portrait">
+  <div class="sec-eyebrow">01 · Qui vous êtes</div>
+  <h2>Pas en détresse. Pas vraiment aux commandes non plus. Parfois ça vous bloque.</h2>
+  <p class="sec-lead">Quand on vous demande comment vous vivez vos finances au quotidien, le tableau est le même pour la grande majorité d'entre vous. Vous n'êtes pas en détresse, mais pas en maîtrise non plus. Quelque part entre les deux.</p>
+
+  <div class="card">
+    <div class="card-label">Votre rapport aux finances en ce moment</div>
+    <div class="donut-layout">
+      <div class="donut-svg-wrap">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="14" fill="none" stroke="#f0ece4" stroke-width="4.5"/>
+          <circle cx="18" cy="18" r="14" fill="none" stroke="#0f1f3d" stroke-width="4.5" stroke-dasharray="56.5 31.5"/>
+          <circle cx="18" cy="18" r="14" fill="none" stroke="#c8a96e" stroke-width="4.5" stroke-dasharray="12.4 75.6" stroke-dashoffset="-56.5"/>
+          <circle cx="18" cy="18" r="14" fill="none" stroke="#1a4fa0" stroke-width="4.5" stroke-dasharray="12.4 75.6" stroke-dashoffset="-68.9"/>
+          <circle cx="18" cy="18" r="14" fill="none" stroke="#c0392b" stroke-width="4.5" stroke-dasharray="6.2 81.8" stroke-dashoffset="-81.3"/>
+        </svg>
+        <div class="donut-center">
+          <div class="donut-center-n">64%</div>
+          <div class="donut-center-sub">réponse<br>dominante</div>
+        </div>
+      </div>
+      <div class="donut-leg">
+        <div class="leg-row"><div class="leg-dot" style="background:var(--navy)"></div><div class="leg-text"><strong>64%</strong> Globalement sous contrôle, mais je pourrais mieux faire</div></div>
+        <div class="leg-row"><div class="leg-dot" style="background:var(--gold)"></div><div class="leg-text"><strong>14%</strong> Un peu flou, je fais au feeling</div></div>
+        <div class="leg-row"><div class="leg-dot" style="background:var(--blue)"></div><div class="leg-text"><strong>14%</strong> Tout est clair, je maîtrise</div></div>
+        <div class="leg-row"><div class="leg-dot" style="background:#c0392b"></div><div class="leg-text"><strong>7%</strong> Complètement perdu(e)</div></div>
+      </div>
+    </div>
+  </div>
+
+<div class="callout amber">
+  <div class="callout-ico">💡</div>
+  <div>
+    <p><strong>"Sous contrôle mais perfectible"</strong> est souvent l'état le plus coûteux. On se dit que ça va, donc on n'agit pas...</p>
+    <p style="margin-top:10px; font-style:italic">C'est le profil qui m'intéresse le plus. Pas parce qu'il est le plus urgent, mais parce que c'est là où un tout petit peu de méthode change vraiment quelque chose. Souvent quelques milliers d'euros par an, sans rien modifier en profondeur.</p>
+  </div>
+</div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="card-label">Votre niveau de compréhension des sujets financiers (auto-évaluation de 1 à 5)</div>
+    <div class="bars">
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Niveau 2 · Les bases, mais ça reste compliqué</span><span class="bar-val">43%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:43%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Niveau 3 · L'essentiel, mais pas les subtilités</span><span class="bar-val">43%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:43%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Niveau 4 · Je comprends bien la plupart des sujets</span><span class="bar-val">14%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:14%"></div></div>
+      </div>
+    </div>
+    <p style="margin-top:16px"><strong>0% débutant complet. 0% expert.</strong> Tout le monde se situe dans le même créneau : assez informé pour sentir que quelque chose se joue, pas assez pour agir avec vraiment confiance. Et c'est exactement là que naît l'hésitation.</p>
+  </div>
+
+  <!-- Profil démographique sobre -->
+  <div class="g2" style="margin-top:12px">
+    <div class="card">
+      <div class="card-label">Tranche d'âge</div>
+      <div class="bars">
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">30 à 39 ans</span><span class="bar-val">86%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:86%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">40 à 49 ans</span><span class="bar-val">7%</span></div>
+          <div class="bar-track"><div class="bar-fill g" style="width:7%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">20 à 29 ans</span><span class="bar-val">7%</span></div>
+          <div class="bar-track"><div class="bar-fill g" style="width:7%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Situation personnelle</div>
+      <div class="bars">
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">En couple avec enfant(s)</span><span class="bar-val">43%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:43%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">Célibataire sans enfant</span><span class="bar-val">36%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:36%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">En couple sans enfant</span><span class="bar-val">21%</span></div>
+          <div class="bar-track"><div class="bar-fill g" style="width:21%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 PRÉOCCUPATIONS -->
+<section class="sec" id="preoccupations">
+  <div class="sec-eyebrow">02 · Ce qui vous préoccupe</div>
+  <h2>Placements, immobilier,<br>impôts. Dans cet ordre.</h2>
+  <p class="sec-lead">Quand on vous demande ce qui vous préoccupe le plus financièrement, trois sujets reviennent en boucle. Ils parlent tous de la même chose : <b>faire travailler son argent plutôt que de le laisser dormir</b>.</p>
+
+  <div class="big-n-row">
+    <div class="big-n-cell">
+      <div class="big-n">71%</div>
+      <div class="big-n-label">veulent optimiser leurs placements ou leur épargne</div>
+    </div>
+    <div class="big-n-cell">
+      <div class="big-n">64%</div>
+      <div class="big-n-label">ont l'immobilier en tête (achat ou remboursement)</div>
+    </div>
+    <div class="big-n-cell">
+      <div class="big-n">36%</div>
+      <div class="big-n-label">cherchent à payer moins d'impôts</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Tous les sujets qui préoccupent</div>
+    <div class="bars">
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">📈 Optimiser mes placements et mon épargne</span><span class="bar-val">71%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:71%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">🏡 Acheter ou rembourser un bien immobilier</span><span class="bar-val">64%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:64%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">🏛️ Réduire mes impôts</span><span class="bar-val">36%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:36%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">🛣️ Prendre une décision financière importante</span><span class="bar-val">36%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:36%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">💰 Gérer mon budget au quotidien</span><span class="bar-val">36%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:36%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">🧓 Préparer ma retraite</span><span class="bar-val">14%</span></div>
+        <div class="bar-track"><div class="bar-fill gr" style="width:14%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-dark" style="margin-top:12px">
+    <div class="dark-quote">La retraite ? Ça attendra.<br>L'immo et les placements, <em>c'est maintenant.</em></div>
+    <p>L'horizon, c'est 3 à 10 ans. La retraite peut attendre, l'immobilier et les placements non. Ce n'est pas de l'insouciance, c'est une logique de construction que je reconnais bien.</p>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="card-label">Sur quoi vous aimeriez être mieux accompagné(e) ou formé(e)</div>
+    <p>Les réponses libres à cette question sont frappantes par leur diversité. <strong>Immobilier, placements, fiscalité, épargne, protection sociale des indépendants, actions en bourse...</strong> Chacun arrive avec ses propres questions. Et personne ne trouve de guichet unique pour les traiter toutes ensemble.</p>
+    <div class="tags">
+      <span class="tag dark">Immobilier</span>
+      <span class="tag dark">Placements et épargne</span>
+      <span class="tag dark">Fiscalité</span>
+      <span class="tag dark">Constitution de patrimoine</span>
+      <span class="tag">Protection sociale indépendants</span>
+      <span class="tag">Actions et bourse</span>
+      <span class="tag">Réduction d'impôts</span>
+    </div>
+  </div>
+</section>
+
+<!-- 03 BLOCAGES -->
+<section class="sec" id="blocages">
+  <div class="sec-eyebrow">03 · Ce qui vous bloque</div>
+  <h2>Vous cherchez, vous demandez<br>autour de vous. Mais vous n'êtes jamais vraiment sûr(e).</h2>
+  <p class="sec-lead">Face à une décision financière importante, la réaction spontanée n'est ni la confiance ni l'action. C'est souvent le doute. Et ce doute a un coût qu'on ne voit pas toujours.</p>
+
+  <div class="card">
+    <div class="card-label">Vous est-il déjà arrivé de prendre une décision financière sans être vraiment sûr(e) de faire le bon choix ?</div>
+    <div class="bars">
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Rarement</span><span class="bar-val">43%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:43%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Oui, quelquefois</span><span class="bar-val">36%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:36%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Jamais</span><span class="bar-val">21%</span></div>
+        <div class="bar-track"><div class="bar-fill gr" style="width:21%"></div></div>
+      </div>
+    </div>
+    <div class="callout amber" style="margin-top:14px">
+      <div class="callout-ico">⚠️</div>
+      <p><strong>79% d'entre vous</strong> ont déjà signé quelque chose en <b>espérant</b> que c'était le bon choix. Ce chiffre résume à lui seul pourquoi j'ai voulu lancer cette activité.</p>
+    </div>
+  </div>
+
+  <div class="verbatim" style="margin-top:4px"><p>« Un achat Pinel qui me semblait pertinent, mais tellement de facteurs inconnus que je n'ai jamais vraiment su si c'était le bon choix. »</p></div>
+  <div class="verbatim"><p>« Je mets de l'argent de côté tous les mois sans savoir où l'investir. »</p></div>
+  <div class="verbatim"><p>« Une assurance-vie souscrite sans vraie visibilité sur le moyen terme. »</p></div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="card-label">Ce qui vous empêche de prendre vos finances en main comme vous le voudriez</div>
+    <div class="bars">
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Je manque de connaissances</span><span class="bar-val">43%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:43%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Je manque de temps</span><span class="bar-val">43%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:43%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">C'est trop complexe, je ne sais pas par où commencer</span><span class="bar-val">29%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:29%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">J'ai peur de faire une erreur</span><span class="bar-val">21%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:21%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Je ne sais pas vers qui me tourner</span><span class="bar-val">14%</span></div>
+        <div class="bar-track"><div class="bar-fill gr" style="width:14%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-top:12px">
+    <div class="card">
+      <div class="card-label">Quand une décision arrive, vous...</div>
+      <div class="bars">
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">Demandez à vos proches</span><span class="bar-val">57%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:57%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">Cherchez articles, vidéos, forums</span><span class="bar-val">50%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:50%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">Décidez seul(e)</span><span class="bar-val">43%</span></div>
+          <div class="bar-track"><div class="bar-fill g" style="width:43%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">Reportez la décision</span><span class="bar-val">21%</span></div>
+          <div class="bar-track"><div class="bar-fill g" style="width:21%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Comment vous qualifieriez vos décisions</div>
+      <div class="bars">
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">Réfléchies mais parfois floues</span><span class="bar-val">43%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:43%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">Très réfléchies et structurées</span><span class="bar-val">29%</span></div>
+          <div class="bar-track"><div class="bar-fill gr" style="width:29%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">Intuitives</span><span class="bar-val">21%</span></div>
+          <div class="bar-track"><div class="bar-fill g" style="width:21%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><span class="bar-name">Subies ou dans l'urgence</span><span class="bar-val">7%</span></div>
+          <div class="bar-track"><div class="bar-fill g" style="width:7%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="card-label">Votre expérience avec la banque</div>
+    <div class="bars">
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Satisfaisante ou très satisfaisante</span><span class="bar-val">28%</span></div>
+        <div class="bar-track"><div class="bar-fill gr" style="width:28%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Moyenne</span><span class="bar-val">36%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:36%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Décevante ou très décevante</span><span class="bar-val">21%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:21%"></div></div>
+      </div>
+    </div>
+    <p style="margin-top:14px">La banque reste l'interlocuteur le plus fréquent, mais surtout par manque d'alternative visible. La satisfaction est médiocre, et pourtant on y revient. Et quand on pense à un CGP indépendant, <strong>36% imaginent que c'est réservé aux personnes très aisées</strong>, 29% pensent que c'est trop orienté vente. Des idées reçues que je comprends, et que je peux clarifier avec vous.</p>
+  </div>
+
+  <div class="verbatim"><p>« Avec la banque, j'ai juste le sentiment de me faire lessiver. »</p></div>
+  <div class="verbatim"><p>« Chacun fait son travail mais personne n'a de vision globale. On se retrouve avec des briques qui s'assemblent mal. »</p></div>
+</section>
+
+<!-- 04 CE QUE VOUS ATTENDEZ -->
+<section class="sec" id="conseiller">
+  <div class="sec-eyebrow">04 · Ce que vous attendez</div>
+  <h2>Pas quelqu'un qui vend.<br>Quelqu'un qui explique.</h2>
+  <p class="sec-lead">Quand on vous demande ce que vous attendriez vraiment d'un conseiller financier, la réponse est claire : vous voulez être accompagné(e) dans vos décisions importantes, pas vous faire proposer des produits.</p>
+
+  <div class="card">
+    <div class="card-label">Ce que vous attendez en priorité d'un conseiller</div>
+    <div class="bars">
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">M'accompagner dans mes décisions importantes (immo, transmission...)</span><span class="bar-val">71%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:71%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Me proposer des solutions adaptées à ma situation</span><span class="bar-val">50%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">M'expliquer clairement, me former pour que je comprenne</span><span class="bar-val">50%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Optimiser ma fiscalité</span><span class="bar-val">29%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:29%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Me challenger pour éviter les erreurs</span><span class="bar-val">29%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:29%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Suivre mon patrimoine dans la durée</span><span class="bar-val">29%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:29%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="card-label">Dans quelles situations un accompagnement vous serait utile</div>
+    <div class="bars">
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Éviter les erreurs</span><span class="bar-val">64%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:64%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Clarifier ma situation globale</span><span class="bar-val">57%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:57%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Structurer mes finances</span><span class="bar-val">50%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:50%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Optimiser ce que je fais déjà</span><span class="bar-val">50%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:50%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Être rassuré(e) dans mes décisions</span><span class="bar-val">43%</span></div>
+        <div class="bar-track"><div class="bar-fill gr" style="width:43%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Gagner du temps</span><span class="bar-val">43%</span></div>
+        <div class="bar-track"><div class="bar-fill gr" style="width:43%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout green" style="margin-top:4px">
+    <div class="callout-ico">🔑</div>
+    <p>La demande n°1 n'est pas "aidez-moi à gagner plus". C'est <strong>"aidez-moi à ne pas perdre"</strong>. La sécurité émotionnelle de la décision prime sur la performance. Un conseil clair et transparent vaut plus, à vos yeux, qu'une promesse de rendement.</p>
+  </div>
+
+  <!-- Type d'accompagnement -->
+  <div class="card" style="margin-top:12px">
+    <div class="card-label">Le type d'accompagnement qui vous conviendrait</div>
+    <div class="bars">
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Long terme avec suivi régulier</span><span class="bar-val">36%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:36%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Sur quelques mois</span><span class="bar-val">36%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:36%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-top"><span class="bar-name">Ponctuel (1 ou 2 rendez-vous)</span><span class="bar-val">29%</span></div>
+        <div class="bar-track"><div class="bar-fill g" style="width:29%"></div></div>
+      </div>
+    </div>
+    <p style="margin-top:12px">Les réponses se répartissent quasi équitablement entre les trois formules (et je vous avoue que ça ne m'aide pas :p)</p>
+<p style="margin-top:10px">Voici comment je l'interprète : c'est le reflet de situations différentes. Le ponctuel pour <strong>tester</strong>, le court terme pour <strong>structurer</strong>, le long terme pour ceux qui ont compris la valeur du <strong>suivi dans le temps</strong>.</p>
+<p style="margin-top:10px">Ce que je retiens : <strong>c'est à moi de m'adapter.</strong></p>
+  </div>
+
+  <div class="verbatim"><p>« Sa légitimité. Quelqu'un parti de rien qui a réussi à développer son propre patrimoine. On peut être CGP sans maîtriser ses propres dépenses. »</p></div>
+  <div class="verbatim"><p>« Avoir une vision globale. La fiscalité touche tous les niveaux de la vie et on n'est tout simplement pas éduqués à gérer ça. »</p></div>
+</section>
+
+<!-- 05 LE BON MOMENT -->
+<section class="sec" id="quand">
+  <div class="sec-eyebrow">05 · Le bon moment</div>
+  <h2>Quand faut-il se faire accompagner financièrement ?</h2>
+  <p class="sec-lead">Sur cette question, la convergence est frappante. Les formulations sont différentes mais le message est le même chez presque tout le monde.</p>
+
+  <div class="card card-dark">
+    <div class="dark-quote">"Le plus tôt possible. Dès 18 ans. Dès les premiers revenus.<br><em>Dès la vie active."</em></div>
+    <p>Presque personne ne répond "quand on est riche" ou "à la retraite". Tout le monde perçoit, avec du recul, qu'il aurait pu commencer avant. <strong>A titre personnel, je pense que c'est le signe que l'éducation financière en France est insuffisante.</strong></p>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="card-label">Les moments clés identifiés comme déclencheurs naturels</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">Dès les premiers revenus (18 à 22 ans)</div>
+          <div class="tl-desc">Ouvrir les bonnes enveloppes fiscales tôt (PEA, assurance-vie) permet de bénéficier de l'antériorité fiscale. Un des 1ers conseils que je donne à mon entourage à toujours été de <b>"prendre date"</b>.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">Premier investissement ou achat immobilier</div>
+          <div class="tl-desc">À ce moment, les sommes deviennent significatives et les erreurs coûteuses. Le besoin d'un regard extérieur est donc maximal. Avoir quelqu'un pour <strong>valider ou rassurer</strong> peut faire la différence entre un projet (bien) réalisé ou non.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">Quand l'argent "dort"</div>
+          <div class="tl-desc">Dès qu'une somme dépasse les dépenses courantes sans objectif clair, le coût d'opportunité <strong>et l'inflation</strong> commencent à courir silencieusement… Quand on connaît, il est pourtant assez simple de <strong>faire travailler l'argent</strong> sans prendre de risque inconsidéré.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">À chaque événement de vie structurant</div>
+          <div class="tl-desc"><div class="tl-desc">Mariage, naissance, voyage, création d'entreprise, héritage, divorce… Ces moments clés réorganisent tout le patrimoine et méritent un accompagnement dédié. Avec une stratégie claire, <strong>très peu de projets sont réellement hors de portée.</strong></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout blue" style="margin-top:4px">
+    <div class="callout-ico">📌</div>
+    <p>Si vous lisez ceci, vous êtes dans la bonne fenêtre. Les personnes interrogées ont majoritairement entre 30 et 40 ans, exactement le moment où les décisions financières ont le plus grand impact sur les 20 années suivantes.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-block">
+  <h3>Merci.</h3>
+  <p>Si vous aviez coché "Je veux un échange offert" vous pouvez le réserver ici.<br>Si vous n'aviez pas coché mais que vous avez changé d'avis, vous pouvez le faire aussi :)</p>
+  <a href="https://calendar.app.google/EG99Qw6N9GCtqLsWA" class="cta-btn">Réserver un échange offert</a>
+  <p class="cta-sub" style="margin-top:16px; font-size:10.5px">30 min · Sans engagement · Présentiel ou visio</p>
+</div>
+
+<div style="text-align:center; padding:40px 32px 0; max-width:480px; margin:0 auto">
+  <p style="font-size:14px; color:var(--muted); line-height:1.8">Ce questionnaire m'a confirmé l'essentiel : la plupart des gens ont envie d'agir et de prendre leurs finances en main. Je m'engage à être à la hauteur de cette confiance.</p>
+  <p style="margin-top:20px; font-family:'Playfair Display',serif; font-size:16px; color:var(--navy); font-style:italic">À bientôt.</p>
+  <p style="font-size:13px; color:var(--muted); margin-top:4px">Cédric Soubeiga</p>
+</div>
+
+<div class="footer">
+  <p><strong>Cédric Soubeiga</strong> · Conseiller en Gestion de Patrimoine<br>Résultats partagés avec les répondants - Mai 2026</p>
+</div>
+
+</div>
+</body>
+</html>
