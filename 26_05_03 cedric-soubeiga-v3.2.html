@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cédric Soubeiga — Conseil en patrimoine indépendant · Amiens</title>
+<meta name="description" content="Vous savez que vous devriez agir. Mais entre l'info bancaire, les forums et votre banquier, difficile de savoir par où commencer. Cédric Soubeiga, CGP indépendant — zéro conflit d'intérêt.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:       #F9F7F3;
+  --white:    #FFFFFF;
+  --ink:      #1C1F1C;
+  --ink-2:    #3A3D3A;
+  --ink-3:    #6E726E;
+  --line:     #E5E2D8;
+  --line-2:   #F0EDE5;
+  --sage:     #4B6347;
+  --sage-2:   #3A4E37;
+  --sage-l:   #EBF0E8;
+  --sage-ll:  #F4F6F2;
+  --bronze:   #8B6532;
+  --bronze-l: #F5EFE3;
+  --amber:    #C9972A;
+  --warm:     #FAF7F0;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Geist',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+.serif{font-family:'Fraunces',Georgia,serif}
+.container{max-width:1160px;margin:0 auto;padding:0 32px}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);
+  z-index:200;
+  width:calc(100% - 48px);max-width:1160px;
+  padding:10px 10px 10px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  background:rgba(249,247,243,0.88);
+  backdrop-filter:blur(24px) saturate(160%);
+  border:1px solid rgba(229,226,216,0.9);
+  border-radius:100px;
+  box-shadow:0 2px 20px rgba(0,0,0,0.06);
+  transition:box-shadow .3s;
+}
+nav.scrolled{box-shadow:0 4px 32px rgba(0,0,0,0.1)}
+
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);flex-shrink:0}
+.nav-monogram{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-size:14px;font-style:italic;color:var(--bg);
+  position:relative;flex-shrink:0;
+}
+.nav-monogram::after{
+  content:'';position:absolute;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--amber);
+  right:-1px;bottom:-1px;
+  border:2px solid var(--bg);
+}
+.nav-name{font-size:15px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
+
+.nav-links{display:flex;gap:4px;list-style:none;margin:0 auto}
+.nav-links a{
+  font-size:14px;color:var(--ink-3);text-decoration:none;
+  padding:6px 14px;border-radius:100px;
+  transition:background .15s,color .15s;
+}
+.nav-links a:hover{background:var(--line-2);color:var(--ink)}
+
+.nav-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 22px;
+  background:var(--ink);color:var(--bg);
+  border-radius:100px;
+  font-size:14px;font-weight:500;text-decoration:none;
+  transition:background .2s,transform .15s;
+  flex-shrink:0;white-space:nowrap;
+}
+.nav-cta:hover{background:var(--sage-2);transform:translateY(-1px)}
+
+/* ── HERO ── */
+.hero{
+  padding:140px 0 80px;
+  position:relative;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 90% 10%, rgba(75,99,71,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 85%, rgba(139,101,50,.06) 0%, transparent 55%);
+}
+
+.hero-inner{position:relative;z-index:1}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:7px 16px 7px 10px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:100px;
+  font-size:13px;color:var(--ink-3);
+  margin-bottom:36px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
+  animation:fadeUp .5s .05s both;
+}
+.hero-badge-dot{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--sage-l);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--sage);font-size:11px;
+}
+
+.hero h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(40px,5vw,72px);
+  font-weight:400;
+  line-height:1.0;
+  letter-spacing:-.03em;
+  color:var(--ink);
+  margin-bottom:36px;
+  animation:fadeUp .6s .15s both;
+  max-width:1000px;
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--sage);
+}
+.hero h1 .highlight{
+  position:relative;display:inline-block;
+}
+.hero h1 .highlight::after{
+  content:'';
+  position:absolute;
+  left:0;right:0;bottom:8px;
+  height:12px;
+  background:var(--bronze-l);
+  z-index:-1;
+  border-radius:4px;
+}
+
+.hero-sub{
+  font-size:19px;line-height:1.65;
+  color:var(--ink-3);font-weight:300;
+  max-width:600px;
+  margin-bottom:44px;
+  animation:fadeUp .6s .28s both;
+}
+
+.hero-actions{
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  animation:fadeUp .6s .4s both;
+}
+.btn-main{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:16px 30px;
+  background:var(--ink);color:var(--bg);
+  border-radius:100px;
+  font-size:15px;font-weight:500;text-decoration:none;
+  transition:background .2s,transform .15s,box-shadow .2s;
+}
+.btn-main:hover{background:var(--sage-2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(58,78,55,.25)}
+.btn-main svg{transition:transform .2s}
+.btn-main:hover svg{transform:translateX(3px)}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:16px 26px;
+  background:var(--white);color:var(--ink);
+  border:1px solid var(--line);
+  border-radius:100px;
+  font-size:15px;font-weight:400;text-decoration:none;
+  transition:all .2s;
+}
+.btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+
+/* hero proof row */
+.hero-proof{
+  display:flex;align-items:center;gap:28px;
+  margin-top:56px;
+  padding-top:32px;
+  border-top:1px solid var(--line);
+  flex-wrap:wrap;
+  animation:fadeUp .6s .52s both;
+}
+.proof-item{
+  display:flex;align-items:center;gap:9px;
+  font-size:13px;color:var(--ink-3);
+}
+.proof-icon{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--sage-l);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--sage);flex-shrink:0;
+}
+
+/* hero cards */
+.hero-cards{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:14px;
+  margin-top:64px;
+  animation:fadeUp .7s .62s both;
+}
+
+.hcard{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:28px;
+  position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+}
+.hcard:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.07)}
+
+.hcard-photo{
+  background:linear-gradient(135deg,var(--sage-ll) 0%,var(--sage-l) 100%);
+  display:flex;align-items:flex-end;
+  min-height:220px;
+}
+.photo-placeholder{
+  background:rgba(255,255,255,.75);
+  backdrop-filter:blur(8px);
+  border:1.5px dashed var(--sage);
+  border-radius:14px;
+  padding:12px 18px;
+  font-size:12px;color:var(--sage-2);
+  display:flex;align-items:center;gap:8px;
+  margin:0 auto 24px;
+}
+
+.hcard-stat{
+  background:var(--warm);
+  border:1px solid var(--bronze-l);
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-height:160px;
+}
+.stat-big{
+  font-family:'Fraunces',serif;
+  font-size:60px;line-height:1;
+  color:var(--ink);
+}
+.stat-big em{font-style:italic;color:var(--sage)}
+.stat-label{font-size:13px;color:var(--ink-3);line-height:1.5;margin-top:10px}
+
+.hcard-tag{
+  background:var(--sage-ll);
+  border:1px solid var(--sage-l);
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-height:160px;
+}
+.tag-big{
+  font-family:'Fraunces',serif;
+  font-size:56px;line-height:1;
+  color:var(--sage-2);
+  font-style:italic;
+}
+
+/* ── PAIN POINTS ── */
+.pains{
+  padding:100px 0;
+  background:#2C3329;
+  position:relative;overflow:hidden;
+}
+.pains::before{
+  content:'';position:absolute;
+  top:-120px;right:-120px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(75,99,71,.22) 0%,transparent 65%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.pains-head{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:60px;align-items:end;
+  margin-bottom:64px;
+}
+.pains-eyebrow{
+  font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--sage);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.pains-eyebrow::before{content:'';width:20px;height:1px;background:var(--sage)}
+
+.pains h2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(30px,3.8vw,48px);
+  font-weight:400;line-height:1.05;
+  letter-spacing:-.02em;
+  color:var(--bg);
+}
+.pains h2 em{font-style:italic;color:var(--sage)}
+
+.pains-intro{
+  font-size:17px;line-height:1.7;
+  color:rgba(255,255,255,.5);
+  padding-top:8px;
+}
+.pains-intro strong{color:rgba(255,255,255,.85);font-weight:400}
+
+.pain-cards{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.pain-card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:24px;
+  padding:36px 32px;
+  transition:background .2s,border-color .2s;
+}
+.pain-card:hover{
+  background:rgba(255,255,255,.10);
+  border-color:rgba(75,99,71,.5);
+}
+.pain-num{
+  font-family:'Fraunces',serif;
+  font-size:48px;line-height:1;
+  color:rgba(255,255,255,.06);
+  margin-bottom:20px;
+  font-style:italic;
+}
+.pain-title{
+  font-size:18px;font-weight:500;
+  color:var(--bg);
+  margin-bottom:14px;
+  line-height:1.3;
+}
+.pain-body{
+  font-size:14px;line-height:1.7;
+  color:rgba(255,255,255,.5);
+}
+
+/* quote cost */
+.pain-cta-row{
+  margin-top:48px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.cost-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(139,101,50,.35);
+  border-radius:24px;
+  padding:40px;
+  position:relative;overflow:hidden;
+}
+.cost-card::before{
+  content:'';position:absolute;
+  bottom:-60px;right:-60px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(139,101,50,.15) 0%,transparent 65%);
+  border-radius:50%;
+}
+.cost-label{
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);margin-bottom:14px;
+}
+.cost-num{
+  font-family:'Fraunces',serif;
+  font-size:76px;line-height:1;
+  color:var(--bg);
+  font-style:italic;
+}
+.cost-num em{color:var(--amber)}
+.cost-desc{
+  font-size:14px;line-height:1.65;
+  color:rgba(255,255,255,.45);
+  margin-top:16px;position:relative;z-index:1;
+}
+
+.quote-card{
+  background:rgba(75,99,71,.15);
+  border:1px solid rgba(75,99,71,.25);
+  border-radius:24px;
+  padding:40px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.quote-text{
+  font-family:'Fraunces',serif;
+  font-size:26px;line-height:1.4;
+  font-style:italic;color:var(--bg);
+  flex:1;
+}
+.quote-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:32px;
+  padding:13px 24px;
+  background:var(--sage);color:var(--bg);
+  border-radius:100px;
+  font-size:14px;font-weight:500;
+  text-decoration:none;align-self:flex-start;
+  transition:background .2s;
+}
+.quote-cta:hover{background:var(--sage-2)}
+
+/* ── ABOUT ── */
+.about{padding:100px 0;background:var(--white)}
+.about-grid{
+  display:grid;grid-template-columns:1fr 1.1fr;
+  gap:80px;align-items:center;
+}
+.about-img{
+  aspect-ratio:4/5;
+  background:linear-gradient(160deg,var(--sage-ll) 0%,var(--sage-l) 100%);
+  border-radius:32px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;
+  border:1px solid var(--line);
+}
+.about-img-placeholder{
+  width:100%;padding:32px;
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(10px);
+  border-top:1px dashed var(--sage);
+  display:flex;align-items:center;gap:12px;
+  font-size:13px;color:var(--sage-2);
+}
+.about-chip{
+  position:absolute;top:24px;right:24px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:100px;
+  padding:8px 16px;
+  font-size:12px;color:var(--ink-3);
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.about-eyebrow{
+  font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--sage);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.about-eyebrow::before{content:'';width:20px;height:1px;background:var(--sage)}
+
+.about h2{
+  font-family:'Fraunces',serif;
+  font-size:clamp(28px,3.5vw,44px);
+  font-weight:400;line-height:1.05;
+  letter-spacing:-.02em;
+  color:var(--ink);
+  margin-bottom:28px;
+}
+.about h2 em{font-style:italic;color:var(--sage)}
+
+.about-story{
+  font-size:16px;line-height:1.8;
+  color:var(--ink-3);
+}
+.about-story p+p{margin-top:16px}
+.about-story strong{color:var(--ink);font-weight:500}
+
+.about-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--line);
+  border:1px solid var(--line);
+  border-radius:20px;overflow:hidden;
+  margin-top:40px;
+}
+.astat{
+  background:var(--bg);
+  padding:24px 20px;text-align:center;
+}
+.astat-num{
+  font-family:'Fraunces',serif;
+  font-size:40px;font-style:italic;
+  color:var(--ink);line-height:1;
+}
+.astat-label{
+  font-size:12px;color:var(--ink-3);
+  margin-top:6px;line-height:1.4;
+}
+
+/* ── PROCESS ── */
+.process{padding:100px 0}
+
+.section-eyebrow{
+  font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--sage);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--sage)}
+
+.section-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(30px,3.8vw,48px);
+  font-weight:400;line-height:1.05;
+  letter-spacing:-.02em;
+  color:var(--ink);
+  margin-bottom:20px;
+}
+.section-title em{font-style:italic;color:var(--sage)}
+.section-lead{
+  font-size:17px;line-height:1.7;
+  color:var(--ink-3);font-weight:300;
+  max-width:640px;margin-bottom:60px;
+}
+
+.process-wrap{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.pstep{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:32px 28px;
+  position:relative;
+  transition:all .25s;
+}
+.pstep:hover{transform:translateY(-4px);border-color:var(--sage);box-shadow:0 12px 32px rgba(75,99,71,.1)}
+.pstep-num{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--sage-ll);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-size:16px;
+  font-style:italic;color:var(--sage);
+  margin-bottom:24px;
+}
+.pstep h3{
+  font-family:'Fraunces',serif;
+  font-size:26px;font-weight:400;color:var(--ink);
+  margin-bottom:12px;
+}
+.pstep p{font-size:14px;line-height:1.65;color:var(--ink-3)}
+
+/* ── DIFFÉRENCIATEURS ── */
+.diff{padding:100px 0;background:var(--white)}
+
+.diff-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.dcard{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:40px;
+  transition:all .25s;
+}
+.dcard:hover{border-color:var(--sage);transform:translateY(-2px)}
+.dcard.wide{
+  grid-column:span 2;
+  display:grid;grid-template-columns:1.2fr 1fr;
+  gap:48px;align-items:center;
+  background:var(--sage-ll);
+  border-color:var(--sage-l);
+  padding:48px;
+}
+.dcard-icon{
+  width:48px;height:48px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--sage);margin-bottom:24px;
+}
+.dcard h3{
+  font-family:'Fraunces',serif;
+  font-size:28px;font-weight:400;line-height:1.15;
+  color:var(--ink);margin-bottom:12px;
+}
+.dcard p{font-size:15px;line-height:1.7;color:var(--ink-3)}
+.dcard-tag{
+  display:inline-block;margin-top:20px;
+  padding:5px 14px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:100px;
+  font-size:12px;color:var(--ink-3);
+}
+
+.dcard.wide .wide-visual{
+  aspect-ratio:1.1;
+  background:var(--white);
+  border-radius:20px;
+  border:1px solid var(--sage-l);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--sage);
+  position:relative;overflow:hidden;
+}
+.dcard.wide .wide-visual::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 30%,var(--sage-l) 0%,transparent 60%);
+}
+
+/* ── ENVELOPPES ── */
+.envelopes{padding:100px 0}
+.env-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:14px;margin-top:0;
+}
+.ecard{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:36px;
+  transition:all .25s;
+}
+.ecard:hover{transform:translateY(-2px);border-color:var(--sage)}
+.ecard-top{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  gap:12px;margin-bottom:20px;
+}
+.ecard-name{
+  font-family:'Fraunces',serif;
+  font-size:34px;font-weight:400;line-height:1;
+  color:var(--ink);
+}
+.ecard-name small{
+  display:block;margin-top:6px;
+  font-size:14px;font-style:italic;color:var(--sage);
+  font-family:'Fraunces',serif;
+}
+.ecard-badge{
+  padding:5px 12px;border-radius:100px;
+  font-size:11px;font-weight:500;white-space:nowrap;
+  background:var(--bronze-l);color:var(--bronze);
+}
+.ecard-badge.green{background:var(--sage-ll);color:var(--sage-2)}
+.ecard p{font-size:14px;line-height:1.65;color:var(--ink-3);margin-bottom:18px}
+.ecard-meta{
+  padding-top:16px;border-top:1px solid var(--line);
+  font-size:13px;color:var(--sage-2);font-weight:500;
+  display:flex;align-items:center;gap:6px;
+}
+
+/* ── CALCULATEUR ── */
+.calc-section{
+  padding:100px 0;
+  background:var(--white);
+}
+.calc-wrap{
+  display:grid;grid-template-columns:1fr 1.1fr;
+  gap:60px;align-items:start;
+  margin-top:0;
+}
+.calc-card{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:32px;
+  padding:40px;
+}
+.calc-title{
+  font-size:16px;font-weight:500;color:var(--ink);
+  margin-bottom:32px;
+  display:flex;align-items:center;gap:10px;
+}
+.calc-title-icon{
+  width:32px;height:32px;background:var(--sage-ll);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--sage);font-size:16px;
+}
+
+.field{margin-bottom:24px}
+.field label{
+  display:block;font-size:13px;color:var(--ink-3);
+  margin-bottom:8px;font-weight:400;
+}
+.field input, .field select{
+  width:100%;
+  padding:13px 16px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:12px;
+  font-size:15px;font-family:'Geist',sans-serif;
+  color:var(--ink);
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  appearance:none;
+}
+.field input:focus, .field select:focus{
+  border-color:var(--sage);
+  box-shadow:0 0 0 3px var(--sage-l);
+}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.slider-wrap{margin-top:8px}
+.slider-wrap input[type=range]{
+  width:100%;
+  -webkit-appearance:none;
+  height:4px;
+  background:var(--line);
+  border-radius:100px;
+  border:none;padding:0;
+  cursor:pointer;
+}
+.slider-wrap input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:18px;height:18px;
+  border-radius:50%;
+  background:var(--sage);
+  box-shadow:0 2px 6px rgba(75,99,71,.3);
+  cursor:pointer;
+}
+.slider-labels{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:var(--ink-3);
+  margin-top:8px;
+}
+
+.calc-btn{
+  width:100%;padding:15px;
+  background:var(--ink);color:var(--bg);
+  border:none;border-radius:14px;
+  font-family:'Geist',sans-serif;
+  font-size:15px;font-weight:500;cursor:pointer;
+  transition:background .2s,transform .15s;
+  margin-top:8px;
+}
+.calc-btn:hover{background:var(--sage-2);transform:translateY(-1px)}
+
+/* results */
+.calc-results{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:32px;
+  padding:40px;
+  display:flex;flex-direction:column;gap:20px;
+}
+.result-empty{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  min-height:340px;gap:16px;text-align:center;
+}
+.result-empty svg{color:var(--line);margin-bottom:8px}
+.result-empty p{font-size:15px;color:var(--ink-3)}
+
+.result-header{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.result-big{
+  font-family:'Fraunces',serif;
+  font-size:64px;font-weight:400;line-height:1;
+  color:var(--ink);font-style:italic;
+}
+.result-big em{color:var(--sage)}
+.result-sub{font-size:14px;color:var(--ink-3);margin-top:6px}
+
+.result-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.rcard{
+  background:var(--white);border:1px solid var(--line);
+  border-radius:18px;padding:20px;
+}
+.rcard-label{font-size:12px;color:var(--ink-3);margin-bottom:8px}
+.rcard-val{
+  font-family:'Fraunces',serif;
+  font-size:28px;font-weight:400;color:var(--ink);
+  font-style:italic;
+}
+.rcard-val.green{color:var(--sage-2)}
+
+.result-graph{
+  background:var(--white);border:1px solid var(--line);
+  border-radius:18px;padding:20px;
+}
+.graph-bar-wrap{
+  display:flex;flex-direction:column;gap:10px;margin-top:12px;
+}
+.gbar-row{display:flex;align-items:center;gap:12px}
+.gbar-label{font-size:12px;color:var(--ink-3);min-width:90px;text-align:right}
+.gbar-bg{flex:1;height:8px;background:var(--line);border-radius:100px;overflow:hidden}
+.gbar-fill{height:100%;border-radius:100px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.gbar-fill.blue{background:var(--sage)}
+.gbar-fill.amber{background:linear-gradient(90deg,var(--sage),var(--amber))}
+.gbar-val{font-size:12px;color:var(--ink);min-width:64px;font-weight:500}
+
+.result-cta-box{
+  background:var(--sage-ll);
+  border:1px solid var(--sage-l);
+  border-radius:18px;padding:24px;
+  text-align:center;
+}
+.result-cta-box p{font-size:14px;color:var(--sage-2);margin-bottom:14px}
+.result-cta-box a{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 22px;
+  background:var(--sage);color:var(--bg);
+  border-radius:100px;font-size:14px;font-weight:500;
+  text-decoration:none;transition:background .2s;
+}
+.result-cta-box a:hover{background:var(--sage-2)}
+
+/* disclaimer */
+.calc-disclaimer{
+  margin-top:12px;
+  font-size:12px;color:var(--ink-3);
+  padding:12px 16px;
+  background:var(--line-2);border-radius:10px;
+  line-height:1.5;
+}
+
+/* ── PRICING ── */
+.pricing{padding:100px 0}
+.pricing-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.pcard{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:36px 32px;
+  transition:all .25s;
+}
+.pcard:hover{transform:translateY(-2px);border-color:var(--sage)}
+.pcard.featured{
+  background:var(--ink);border-color:var(--ink);
+}
+.pcard-type{
+  font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:24px;
+}
+.pcard.featured .pcard-type{color:rgba(255,255,255,.45)}
+.pcard-amount{
+  font-family:'Fraunces',serif;
+  font-size:68px;font-weight:400;line-height:1;
+  color:var(--ink);font-style:italic;
+  margin-bottom:6px;
+}
+.pcard.featured .pcard-amount{color:var(--bg)}
+.pcard-unit{font-size:13px;color:var(--ink-3);margin-bottom:24px}
+.pcard.featured .pcard-unit{color:rgba(255,255,255,.4)}
+.pcard p{font-size:14px;line-height:1.65;color:var(--ink-3)}
+.pcard.featured p{color:rgba(255,255,255,.55)}
+
+.transparency{
+  margin-top:20px;
+  padding:28px 32px;
+  background:var(--bg);border:1px solid var(--line);
+  border-radius:20px;
+  display:flex;gap:20px;align-items:flex-start;
+}
+.trans-icon{
+  flex-shrink:0;width:42px;height:42px;
+  background:var(--sage-ll);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--sage);
+}
+.transparency p{font-size:15px;line-height:1.7;color:var(--ink-3)}
+.transparency strong{color:var(--ink);font-weight:500}
+
+/* ── FEATURES ── */
+.features{padding:100px 0;background:var(--white)}
+.feat-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.fcard{
+  background:var(--bg);border:1px solid var(--line);
+  border-radius:24px;padding:36px;
+  transition:all .25s;
+}
+.fcard:hover{border-color:var(--sage);transform:translateY(-2px)}
+.fcard-icon{
+  width:52px;height:52px;
+  background:var(--white);border:1px solid var(--line);
+  border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:24px;
+}
+.fcard h3{
+  font-family:'Fraunces',serif;
+  font-size:24px;font-weight:400;color:var(--ink);margin-bottom:12px;
+}
+.fcard p{font-size:14px;line-height:1.65;color:var(--ink-3)}
+
+/* ── CTA ── */
+.cta-section{padding:100px 0}
+.cta-card{
+  background:var(--ink);
+  border-radius:40px;
+  padding:88px 60px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-card::before{
+  content:'';position:absolute;
+  top:-100px;right:-100px;
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(75,99,71,.2) 0%,transparent 65%);
+  border-radius:50%;
+}
+.cta-card::after{
+  content:'';position:absolute;
+  bottom:-80px;left:-80px;
+  width:320px;height:320px;
+  background:radial-gradient(circle,rgba(201,151,42,.1) 0%,transparent 65%);
+  border-radius:50%;
+}
+.cta-inner{position:relative;z-index:1}
+.cta-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:100px;
+  font-size:13px;color:rgba(255,255,255,.65);
+  margin-bottom:32px;
+}
+.cta-badge::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--sage);
+  box-shadow:0 0 0 4px rgba(75,99,71,.25);
+}
+.cta-h{
+  font-family:'Fraunces',serif;
+  font-size:clamp(34px,4.5vw,56px);
+  font-weight:400;line-height:1.05;
+  letter-spacing:-.02em;
+  color:var(--bg);
+  margin-bottom:20px;max-width:680px;margin-left:auto;margin-right:auto;
+}
+.cta-h em{font-style:italic;color:var(--amber)}
+.cta-sub{
+  font-size:18px;line-height:1.65;
+  color:rgba(255,255,255,.5);
+  max-width:520px;margin:0 auto 44px;font-weight:300;
+}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:18px 40px;
+  background:var(--bg);color:var(--ink);
+  border-radius:100px;
+  font-size:16px;font-weight:500;text-decoration:none;
+  transition:transform .2s,box-shadow .2s;
+}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.25)}
+.cta-note{margin-top:18px;font-size:13px;color:rgba(255,255,255,.3)}
+
+/* ── FOOTER ── */
+footer{
+  padding:44px 0 36px;
+  background:var(--bg);border-top:1px solid var(--line);
+}
+.footer-top{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;
+}
+.footer-brand{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500;color:var(--ink)}
+.footer-links{display:flex;gap:20px;list-style:none}
+.footer-links a{font-size:13px;color:var(--ink-3);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--ink)}
+.footer-bottom{
+  margin-top:24px;padding-top:20px;border-top:1px solid var(--line);
+  font-size:12px;color:var(--ink-3);line-height:1.6;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .hero-cards{grid-template-columns:1fr}
+  .pains-head,.pain-cards,.pain-cta-row,
+  .about-grid,.calc-wrap,.diff-grid,
+  .process-wrap,.env-grid,.pricing-grid,
+  .feat-grid{grid-template-columns:1fr;gap:20px}
+  .dcard.wide{grid-column:span 1;grid-template-columns:1fr}
+  .field-row{grid-template-columns:1fr}
+  .hero-cards{gap:10px}
+  .nav-links{display:none}
+  section,.pains,.about,.process,.diff,.envelopes,.calc-section,.pricing,.features,.cta-section{padding:70px 0}
+  .cta-card{padding:60px 28px;border-radius:28px}
+  .container{padding:0 20px}
+  nav{width:calc(100% - 28px);padding:8px 8px 8px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <a href="#" class="nav-brand">
+    <div class="nav-monogram">cs</div>
+    <span class="nav-name">Cédric Soubeiga</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#approche">Méthode</a></li>
+    <li><a href="#simulateur">Simulateur</a></li>
+    <li><a href="#honoraires">Honoraires</a></li>
+    <li><a href="#about">À propos</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">
+    Premier échange
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div class="container hero-inner">
+
+    <div class="hero-badge">
+      <span class="hero-badge-dot">✦</span>
+      Conseil en gestion de patrimoine indépendant · Amiens & à distance
+    </div>
+
+    <h1>
+      Vous savez que<br>vous devriez agir.<br>
+      <em><span class="highlight">Passons</span> à la suite.</em>
+    </h1>
+
+    <p class="hero-sub">
+      Pas une option de plus. Pas un produit à souscrire. Une décision à prendre,
+      celle qui aligne votre argent avec votre trajectoire de vie.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#contact" class="btn-main">
+        Réserver un échange gratuit
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#approche" class="btn-ghost">Découvrir la méthode</a>
+    </div>
+
+    <div class="hero-proof">
+      <div class="proof-item">
+        <span class="proof-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span>
+        Indépendant, zéro produit maison
+      </div>
+      <div class="proof-item">
+        <span class="proof-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span>
+        Statut CIF · Régulé AMF
+      </div>
+      <div class="proof-item">
+        <span class="proof-icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span>
+        Investisseur depuis 8 ans, LMNP réel
+      </div>
+    </div>
+
+    <div class="hero-cards">
+      <div class="hcard hcard-photo">
+        <div class="photo-placeholder">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          Photo professionnelle à intégrer
+        </div>
+      </div>
+      <div class="hcard hcard-stat">
+        <div class="stat-big">8<em>+</em></div>
+        <div class="stat-label">années d'investissement personnel avant de conseiller</div>
+      </div>
+      <div class="hcard hcard-tag">
+        <div class="tag-big">0</div>
+        <div class="stat-label" style="color:var(--sage-2);font-weight:500">produit maison · aucun conflit d'intérêt</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PAIN POINTS (Seqooia-inspired) ── -->
+<section class="pains" id="constat">
+  <div class="container">
+    <div class="pains-head">
+      <div>
+        <p class="pains-eyebrow">Le constat</p>
+        <h2>Vous ne manquez pas d'informations.<br><em>Vous en avez trop.</em></h2>
+      </div>
+      <p class="pains-intro">
+        Internet, les forums, votre banquier, les podcasts : chacun vous donne un avis différent.
+        <strong>Résultat : vous savez que vous devriez agir. Et vous n'agissez pas.</strong>
+        Ce n'est pas un problème de volonté. C'est un problème de cadre.
+      </p>
+    </div>
+
+    <div class="pain-cards">
+      <div class="pain-card">
+        <div class="pain-num">01</div>
+        <div class="pain-title">Noyé sous l'information contradictoire</div>
+        <p class="pain-body">ETF Monde, dividendes, SCPI, PER, crypto... chaque jour une nouvelle conviction. Impossible de savoir qui croire. Alors vous attendez un signe qui ne vient pas.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">02</div>
+        <div class="pain-title">Patrimoine éparpillé, sans vision d'ensemble</div>
+        <p class="pain-body">Un peu sur le PEA, une assurance-vie ouverte il y a 10 ans, de l'immobilier, un PER proposé par votre banque. L'ensemble tient debout, mais rien n'est vraiment cohérent.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">03</div>
+        <div class="pain-title">Fiscalité subie chaque année</div>
+        <p class="pain-body">Vous payez ce qu'on vous dit de payer. Mais vous sentez que vous pourriez optimiser : la retraite, les revenus locatifs, la transmission. Vous ne savez pas par où commencer.</p>
+      </div>
+    </div>
+
+    <div class="pain-cta-row">
+      <div class="cost-card">
+        <div class="cost-label">Le coût silencieux de l'inaction</div>
+        <div class="cost-num serif"><em>−</em>47 K€</div>
+        <div class="cost-desc">
+          Manque à gagner estimé sur 10 ans pour 50 000 € laissés sur livret A,
+          versus un portefeuille diversifié à 5 % net annuel.<br><br>
+          Chaque mois sans décision a un prix. L'inaction n'est jamais neutre.
+        </div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-text">
+          "Il n'existe pas un seul bon investissement.<br>Il existe le vôtre, selon vos objectifs, votre fiscalité, votre vie."
+        </div>
+        <a href="#contact" class="quote-cta">
+          Voyons le vôtre
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── À PROPOS (Seqooia-inspired) ── -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img">
+        <div class="about-chip">CGP indépendant · Amiens</div>
+        <div class="about-img-placeholder">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          Photo de Cédric Soubeiga (à intégrer)
+        </div>
+      </div>
+      <div>
+        <p class="about-eyebrow">À propos</p>
+        <h2>J'ai investi sur mon propre argent avant de conseiller <em>le vôtre.</em></h2>
+        <div class="about-story">
+          <p>
+            Je ne viens pas du sérail bancaire. Je viens du terrain.
+            <strong>Huit ans d'investissement personnel</strong> : immobilier en LMNP réel complet, marchés financiers, arbitrages concrets. Je me suis lancé dans le conseil patrimonial après de me lancer dans le conseil patrimonial.
+          </p>
+          <p>
+            Ce parcours me donne quelque chose que la plupart des CGP n'ont pas : <strong>je parle d'expérience, pas de manuel</strong>. Ce que je recommande, je l'ai testé sur mon propre argent.
+          </p>
+          <p>
+            Mon indépendance totale vis-à-vis de tout établissement financier n'est pas un argument marketing. C'est une conviction : <strong>un conseil ne peut être juste que s'il n'est soumis à aucune pression commerciale.</strong>
+          </p>
+        </div>
+        <div class="about-stats">
+          <div class="astat">
+            <div class="astat-num">8+</div>
+            <div class="astat-label">ans d'investissement personnel</div>
+          </div>
+          <div class="astat">
+            <div class="astat-num">0</div>
+            <div class="astat-label">conflit d'intérêt · 0 produit maison</div>
+          </div>
+          <div class="astat">
+            <div class="astat-num">CIF</div>
+            <div class="astat-label">statut régulé AMF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROCESS ── -->
+<section class="process" id="approche">
+  <div class="container">
+    <p class="section-eyebrow">La méthode</p>
+    <h2 class="section-title">Comprendre. Structurer.<br><em>Optimiser. Transmettre.</em></h2>
+    <p class="section-lead">
+      Un CGP ne vend pas un produit. Il suit une séquence rigoureuse définie par l'AMF, pour que le conseil ne soit jamais à côté de votre réalité.
+    </p>
+    <div class="process-wrap">
+      <div class="pstep">
+        <div class="pstep-num">1</div>
+        <h3>Comprendre</h3>
+        <p>Bilan complet : situation personnelle, professionnelle, fiscale. Objectifs, horizon, tolérance au risque. Rien n'est supposé.</p>
+      </div>
+      <div class="pstep">
+        <div class="pstep-num">2</div>
+        <h3>Structurer</h3>
+        <p>Architecture patrimoniale cohérente. Allocation entre enveloppes, priorisation. On parle projet de vie avant de parler produit.</p>
+      </div>
+      <div class="pstep">
+        <div class="pstep-num">3</div>
+        <h3>Optimiser</h3>
+        <p>Sélection des meilleures solutions disponibles, y compris celles réservées aux professionnels. Fiscalité, rendement, liquidité documentés.</p>
+      </div>
+      <div class="pstep">
+        <div class="pstep-num">4</div>
+        <h3>Transmettre</h3>
+        <p>Suivi régulier, ajustements, préparation à la transmission. Votre patrimoine est vivant, votre stratégie aussi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIFFÉRENCIATEURS ── -->
+<section class="diff" id="differenciateurs">
+  <div class="container">
+    <p class="section-eyebrow">Pourquoi moi</p>
+    <h2 class="section-title">Ce qui change avec un<br><em>vrai indépendant</em></h2>
+    <p class="section-lead">Quatre différences structurelles, pas des arguments marketing.</p>
+
+    <div class="diff-grid">
+      <div class="dcard">
+        <div class="dcard-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Investisseur avant d'être conseiller</h3>
+        <p>Huit ans d'investissement personnel : immobilier LMNP réel complet, marchés financiers. Ce que je recommande, je le pratique ou l'ai pratiqué.</p>
+        <span class="dcard-tag">Terrain, pas manuel</span>
+      </div>
+      <div class="dcard">
+        <div class="dcard-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Zéro produit maison. Zéro pression commerciale.</h3>
+        <p>Indépendance totale vis-à-vis de tout établissement. Mon seul alignement : votre intérêt. Ce n'est pas un slogan. C'est structurel.</p>
+        <span class="dcard-tag">Indépendance totale</span>
+      </div>
+      <div class="dcard wide">
+        <div>
+          <h3>Un réseau expert derrière chaque dossier complexe</h3>
+          <p>Fiscalistes, avocats patrimoniaux, gérants de fonds : j'active un écosystème de spécialistes selon votre situation. Et j'ai accès à des solutions non distribuées en banque de détail (Private equity, fonds institutionnels) pour les profils qui s'y prêtent. La puissance d'un cabinet, l'agilité d'un solo.</p>
+          <span class="dcard-tag">Réseau professionnel activable</span>
+        </div>
+        <div class="wide-visual">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+      </div>
+      <div class="dcard">
+        <div class="dcard-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Rigueur analytique et livrables concrets</h3>
+        <p>Simulations chiffrées, scénarios documentés, comparatifs. Vous repartez avec une vision claire, pas une brochure.</p>
+        <span class="dcard-tag">Consultant, pas commercial</span>
+      </div>
+      <div class="dcard">
+        <div class="dcard-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3>Une relation de long terme, pas une transaction</h3>
+        <p>Je construis ma clientèle pour quinze ans. Peu de clients, attention maximale. Votre intérêt long terme est le seul KPI qui compte.</p>
+        <span class="dcard-tag">Engagement durable</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SIMULATEUR PER (Seqooia-inspired: outil gratuit) ── -->
+<section class="calc-section" id="simulateur">
+  <div class="container">
+    <p class="section-eyebrow">Outil gratuit</p>
+    <h2 class="section-title">Simulez votre gain fiscal<br><em>avec un PER</em></h2>
+    <p class="section-lead">
+      Entrez votre situation, obtenez une estimation de l'économie d'impôt annuelle. Sans inscription. En 30 secondes.
+    </p>
+
+    <div class="calc-wrap">
+      <!-- FORM -->
+      <div class="calc-card">
+        <div class="calc-title">
+          <div class="calc-title-icon">🧮</div>
+          Simulateur PER — économie fiscale
+        </div>
+
+        <div class="field">
+          <label>Revenu net imposable annuel (€)</label>
+          <input type="number" id="income" placeholder="ex : 85 000" min="0" step="1000">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Situation familiale</label>
+            <select id="parts">
+              <option value="1">Célibataire (1 part)</option>
+              <option value="2">Marié / Pacsé (2 parts)</option>
+              <option value="2.5">Marié + 1 enfant</option>
+              <option value="3">Marié + 2 enfants</option>
+              <option value="4">Marié + 3 enfants</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Versement PER annuel (€)</label>
+            <input type="number" id="versement" placeholder="ex : 10 000" min="0" step="500">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Horizon retraite : <span id="horizon-val">20</span> ans</label>
+          <div class="slider-wrap">
+            <input type="range" id="horizon" min="5" max="40" value="20"
+              oninput="document.getElementById('horizon-val').textContent=this.value">
+            <div class="slider-labels"><span>5 ans</span><span>40 ans</span></div>
+          </div>
+        </div>
+
+        <button class="calc-btn" onclick="calculate()">Calculer mon économie →</button>
+
+        <p class="calc-disclaimer">
+          Simulation indicative basée sur le barème IR 2024. Ne tient pas compte des charges sociales, 
+          de l'abattement 10 %, ni des situations spécifiques. Pour une analyse personnalisée, prenez rendez-vous.
+        </p>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="calc-results" id="results">
+        <div class="result-empty" id="empty-state">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <p>Renseignez votre situation<br>pour voir votre estimation</p>
+        </div>
+        <div id="result-content" style="display:none;display:flex;flex-direction:column;gap:18px">
+          <div>
+            <div class="result-header">Économie d'impôt estimée</div>
+            <div class="result-big" id="res-saving">—</div>
+            <div class="result-sub" id="res-saving-sub"></div>
+          </div>
+          <div class="result-row">
+            <div class="rcard">
+              <div class="rcard-label">Tranche marginale d'imposition</div>
+              <div class="rcard-val" id="res-tmi">—</div>
+            </div>
+            <div class="rcard">
+              <div class="rcard-label">Économie / versement</div>
+              <div class="rcard-val green" id="res-ratio">—</div>
+            </div>
+          </div>
+          <div class="result-graph" id="res-graph">
+            <div class="rcard-label" style="margin-bottom:0">Impôt avant / après versement PER</div>
+            <div class="graph-bar-wrap" id="bars"></div>
+          </div>
+          <div class="result-cta-box">
+            <p>Cette simulation ne prend pas en compte votre situation complète. Une analyse personnalisée peut révéler d'autres leviers d'optimisation.</p>
+            <a href="#contact">Obtenir un bilan complet →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ENVELOPPES ── -->
+<section class="envelopes" id="solutions">
+  <div class="container">
+    <p class="section-eyebrow">Les enveloppes fiscales</p>
+    <h2 class="section-title">L'enveloppe, c'est le conteneur.<br><em>Le placement, c'est ce qu'on y met.</em></h2>
+    <p class="section-lead" style="margin-bottom:48px">
+      Choisir un produit sans choisir la bonne enveloppe, c'est comme choisir une voiture sans choisir le carburant. L'enveloppe conditionne fiscalité, liquidité et transmission.
+    </p>
+    <div class="env-grid">
+      <div class="ecard">
+        <div class="ecard-top">
+          <div class="ecard-name">PER<small>Plan d'Épargne Retraite</small></div>
+          <span class="ecard-badge">TMI élevée</span>
+        </div>
+        <p>Déduction des versements du revenu imposable. Recommandé pour les TMI ≥ 30 %. Sortie en rente ou en capital à la retraite. Réduire sa pression fiscale aujourd'hui.</p>
+        <div class="ecard-meta">→ Pertinent si TMI &gt; 30 %</div>
+      </div>
+      <div class="ecard">
+        <div class="ecard-top">
+          <div class="ecard-name">Assurance-vie<small>L'enveloppe polyvalente</small></div>
+          <span class="ecard-badge green">Transmission</span>
+        </div>
+        <p>Avantage fiscal après 8 ans, transmission hors succession jusqu'à 152 500 €/bénéficiaire. Liquidité maintenue. La base de toute stratégie patrimoniale.</p>
+        <div class="ecard-meta">→ Capitalisation & succession optimisée</div>
+      </div>
+      <div class="ecard">
+        <div class="ecard-top">
+          <div class="ecard-name">PEA<small>Plan d'Épargne en Actions</small></div>
+          <span class="ecard-badge green">Bourse EU</span>
+        </div>
+        <p>Exonération totale des plus-values après 5 ans (hors prélèvements sociaux). Plafond 150 000 €. Incontournable pour les actions européennes sur le long terme.</p>
+        <div class="ecard-meta">→ Horizon &gt; 5 ans</div>
+      </div>
+      <div class="ecard">
+        <div class="ecard-top">
+          <div class="ecard-name">CTO<small>Compte-Titres Ordinaire</small></div>
+          <span class="ecard-badge">Diversification</span>
+        </div>
+        <p>Aucun plafond. Accès à tous les marchés mondiaux, ETF hors PEA, private equity. Flexibilité totale, complémentaire au PEA pour le hors-Europe.</p>
+        <div class="ecard-meta">→ Actifs hors zone Euro</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HONORAIRES ── -->
+<section class="pricing" id="honoraires">
+  <div class="container">
+    <p class="section-eyebrow">Transparence</p>
+    <h2 class="section-title">Une rémunération que vous<br><em>connaissez à l'avance</em></h2>
+    <p class="section-lead">
+      Pas de surprise, pas d'opacité. Les rétrocessions éventuelles sont intégralement déclarées : vous auriez payé ces frais de toute façon.
+    </p>
+    <div class="pricing-grid">
+      <div class="pcard">
+        <div class="pcard-type">Placements financiers</div>
+        <div class="pcard-amount">1%</div>
+        <div class="pcard-unit">des encours / an</div>
+        <p>Inclut suivi, arbitrages, révisions annuelles et livrables de reporting consolidés.</p>
+      </div>
+      <div class="pcard featured">
+        <div class="pcard-type">Investissement immobilier</div>
+        <div class="pcard-amount">7%</div>
+        <div class="pcard-unit">du montant de l'opération</div>
+        <p>Sélection, analyse de rentabilité, montage fiscal, coordination notaire et gestionnaire. De A à Z.</p>
+      </div>
+      <div class="pcard">
+        <div class="pcard-type">Bilan patrimonial</div>
+        <div class="pcard-amount" style="font-size:36px;padding-top:8px">Sur devis</div>
+        <div class="pcard-unit">selon complexité</div>
+        <p>Analyse complète, recommandations stratégiques, livrable structuré. Déductible si mission complète.</p>
+      </div>
+    </div>
+    <div class="transparency">
+      <div class="trans-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <p>
+        <strong>Transparence par obligation légale et par conviction.</strong> Tout CGP est tenu de déclarer ses modes de rémunération (statut CIF · AMF). Chaque commission est détaillée dans nos documents contractuels et discutée avant tout engagement. Votre intérêt et le mien sont structurellement alignés.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features" id="moderne">
+  <div class="container">
+    <p class="section-eyebrow">L'approche moderne</p>
+    <h2 class="section-title">Investir selon vos valeurs.<br><em>Piloter depuis n'importe où.</em></h2>
+    <div class="feat-grid">
+      <div class="fcard">
+        <div class="fcard-icon">🌿</div>
+        <h3>Critères ESG</h3>
+        <p>Intégration Environnement / Social / Gouvernance dans la sélection des supports. Investir en accord avec vos convictions ne signifie pas sacrifier la performance.</p>
+      </div>
+      <div class="fcard">
+        <div class="fcard-icon">📊</div>
+        <h3>Tableau de bord client</h3>
+        <p>Accès permanent à votre situation patrimoniale consolidée. Allocations, performances, alertes, lisibles en un coup d'oeil, à jour à chaque connexion.</p>
+      </div>
+      <div class="fcard">
+        <div class="fcard-icon">✍️</div>
+        <h3>100 % dématérialisé</h3>
+        <p>Signature électronique, visioconférence, espace documentaire sécurisé. L'accompagnement fonctionne où que vous soyez en France.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <div class="cta-card">
+      <div class="cta-inner">
+        <div class="cta-badge">Premier échange · 30 min · gratuit · sans engagement</div>
+        <h2 class="cta-h">Vous avez un projet.<br><em>Voyons si je peux vous aider.</em></h2>
+        <p class="cta-sub">
+          Pas de pitch commercial. Pas de relance. Un diagnostic honnête pour voir si mon approche correspond à ce dont vous avez besoin.
+        </p>
+        <a href="mailto:contact@cedric-soubeiga.fr" class="cta-btn">
+          Réserver un échange
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <p class="cta-note">Réponse sous 24 h ouvrées · 100 % confidentiel</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-monogram">cs</div>
+        Cédric Soubeiga · Conseil en patrimoine
+      </div>
+      <ul class="footer-links">
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Confidentialité</a></li>
+        <li><a href="#">Statut CIF · AMF</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <p class="footer-bottom">
+      Conseiller en Investissements Financiers, Statut CIF, membre d'une association professionnelle agréée AMF.<br>
+      Le conseil en investissement comporte des risques de perte en capital. Les performances passées ne préjugent pas des performances futures. Simulation fiscale à titre indicatif uniquement.
+    </p>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ── CALCULATEUR PER ──
+function calculate() {
+  const income = parseFloat(document.getElementById('income').value) || 0;
+  const parts = parseFloat(document.getElementById('parts').value) || 1;
+  const versement = parseFloat(document.getElementById('versement').value) || 0;
+  const horizon = parseInt(document.getElementById('horizon').value) || 20;
+
+  if (!income || !versement) {
+    alert('Veuillez renseigner votre revenu et le montant du versement.');
+    return;
+  }
+
+  // Barème IR 2024 simplifié (par part)
+  function getTax(rev, nbParts) {
+    const qi = rev / nbParts; // quotient individuel
+    let tax = 0;
+    if (qi <= 11294) tax = 0;
+    else if (qi <= 28797) tax = (qi - 11294) * 0.11;
+    else if (qi <= 82341) tax = (28797 - 11294) * 0.11 + (qi - 28797) * 0.30;
+    else if (qi <= 177106) tax = (28797 - 11294) * 0.11 + (82341 - 28797) * 0.30 + (qi - 82341) * 0.41;
+    else tax = (28797 - 11294) * 0.11 + (82341 - 28797) * 0.30 + (177106 - 82341) * 0.41 + (qi - 177106) * 0.45;
+    return tax * nbParts;
+  }
+
+  function getTMI(rev, nbParts) {
+    const qi = rev / nbParts;
+    if (qi <= 11294) return 0;
+    if (qi <= 28797) return 11;
+    if (qi <= 82341) return 30;
+    if (qi <= 177106) return 41;
+    return 45;
+  }
+
+  // Plafond PER = 10% des revenus N-1 (simplifié, avant abattement)
+  const plafond = Math.min(income * 0.10, 35194);
+  const versementReel = Math.min(versement, plafond);
+
+  const taxAvant = getTax(income, parts);
+  const taxApres = getTax(income - versementReel, parts);
+  const economie = taxAvant - taxApres;
+  const tmi = getTMI(income, parts);
+  const ratio = versementReel > 0 ? (economie / versementReel * 100).toFixed(0) : 0;
+
+  // Affichage
+  document.getElementById('empty-state').style.display = 'none';
+  const rc = document.getElementById('result-content');
+  rc.style.display = 'flex';
+
+  document.getElementById('res-saving').innerHTML =
+    `<em>${Math.round(economie).toLocaleString('fr-FR')}</em> €`;
+  document.getElementById('res-saving-sub').textContent =
+    `Économie annuelle estimée pour un versement de ${versementReel.toLocaleString('fr-FR')} €`;
+  document.getElementById('res-tmi').textContent = `${tmi} %`;
+  document.getElementById('res-ratio').textContent = `${ratio} %`;
+
+  // Graphe
+  const maxTax = Math.max(taxAvant, taxApres, 1);
+  document.getElementById('bars').innerHTML = `
+    <div class="gbar-row">
+      <span class="gbar-label">Sans PER</span>
+      <div class="gbar-bg"><div class="gbar-fill amber" style="width:${(taxAvant/maxTax*100).toFixed(1)}%"></div></div>
+      <span class="gbar-val">${Math.round(taxAvant).toLocaleString('fr-FR')} €</span>
+    </div>
+    <div class="gbar-row">
+      <span class="gbar-label">Avec PER</span>
+      <div class="gbar-bg"><div class="gbar-fill blue" style="width:${(taxApres/maxTax*100).toFixed(1)}%"></div></div>
+      <span class="gbar-val">${Math.round(taxApres).toLocaleString('fr-FR')} €</span>
+    </div>
+    ${versementReel < versement ? `<div style="margin-top:8px;font-size:12px;color:var(--ink-3)">⚠️ Versement limité à ${versementReel.toLocaleString('fr-FR')} € (plafond PER 2024 : ${Math.round(plafond).toLocaleString('fr-FR')} €)</div>` : ''}
+  `;
+}
+
+// Enter key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') calculate();
+});
+</script>
+
+</body>
+</html>
