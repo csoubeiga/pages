@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice Generator — Cédric Soubeiga</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f172a; --ink2:#475569; --ink3:#94a3b8;
+  --accent:#0f4c81; --accent-light:#e8f0f9; --gold:#c9a84c;
+  --border:#e2e8f0; --surface:#f8fafc; --white:#fff;
+  --danger:#dc2626; --r:8px;
+  --shadow:0 1px 2px rgba(0,0,0,.06),0 4px 20px rgba(0,0,0,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:#eef2f7;color:var(--ink)}
+
+/* ===== LAYOUT ===== */
+.app{display:flex;min-height:100vh;margin-top:36px;margin-bottom:36px}
+.sidebar{width:400px;min-width:400px;background:var(--white);border-right:1px solid var(--border);
+  overflow-y:auto;height:100vh;padding:28px 24px 48px;display:flex;flex-direction:column;gap:24px}
+.preview-area{flex:1;padding:36px;display:flex;flex-direction:column;align-items:center;gap:16px;
+  overflow-y:auto;height:100vh}
+
+/* ===== SIDEBAR ===== */
+.s-logo{display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.s-logo-icon{width:36px;height:36px;background:var(--ink);border-radius:6px;display:flex;
+  align-items:center;justify-content:center;flex-shrink:0}
+.s-logo-icon svg{color:#fff}
+.s-logo-title{font-family:'Playfair Display',serif;font-size:18px;line-height:1.1}
+.s-logo-sub{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-top:2px}
+
+.sec-title{font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--accent-light)}
+
+.fg{display:flex;flex-direction:column;gap:9px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.f label{font-size:10.5px;font-weight:500;color:var(--ink2)}
+.f input,.f textarea,.f select{border:1px solid var(--border);border-radius:var(--r);padding:7px 10px;
+  font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--surface);
+  outline:none;width:100%;transition:border-color .15s,box-shadow .15s}
+.f input:focus,.f textarea:focus,.f select:focus{border-color:var(--accent);background:var(--white);
+  box-shadow:0 0 0 3px rgba(15,76,129,.1)}
+.f textarea{resize:vertical;min-height:52px;line-height:1.5}
+.f input[readonly]{background:#eef2f7;color:var(--ink2);font-family:'IBM Plex Mono',monospace}
+
+/* client bar */
+.client-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px}
+.client-row .f{flex:1}
+.btn-mini{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:0 12px;height:35px;cursor:pointer;font-size:12px;font-weight:500;color:var(--ink2);
+  display:flex;align-items:center;gap:5px;white-space:nowrap;transition:.15s}
+.btn-mini:hover{background:var(--accent-light);border-color:var(--accent);color:var(--accent)}
+
+/* lines */
+.lines-head{display:grid;grid-template-columns:1fr 90px 28px;gap:8px;font-size:9.5px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:0 2px 6px;border-bottom:1px solid var(--border)}
+.line{display:grid;grid-template-columns:1fr 90px 28px;gap:8px;align-items:center;padding:5px 0}
+.line input{border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:12.5px;
+  background:var(--surface);width:100%;outline:none;font-family:'IBM Plex Sans',sans-serif;color:var(--ink)}
+.line input:focus{border-color:var(--accent);background:var(--white)}
+.line input.amt{text-align:right}
+.btn-x{background:none;border:none;cursor:pointer;color:#cbd5e1;font-size:18px;line-height:1;
+  padding:2px;border-radius:4px;transition:.15s}
+.btn-x:hover{color:var(--danger);background:#fef2f2}
+.btn-add{display:flex;align-items:center;gap:6px;background:none;border:1.5px dashed var(--border);
+  border-radius:var(--r);padding:8px 14px;font-size:12px;font-weight:500;color:var(--accent);
+  cursor:pointer;width:100%;margin-top:8px;font-family:'IBM Plex Sans',sans-serif;transition:.15s}
+.btn-add:hover{background:var(--accent-light);border-color:var(--accent)}
+
+/* actions */
+.btn-primary{flex:1;background:var(--ink);color:#fff;border:none;border-radius:var(--r);padding:12px 18px;
+  font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  gap:8px;font-family:'IBM Plex Sans',sans-serif;transition:.15s}
+.btn-primary:hover{background:var(--accent)}
+.btn-ghost{background:var(--surface);color:var(--ink2);border:1px solid var(--border);border-radius:var(--r);
+  padding:12px 16px;font-size:13px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:.15s}
+.btn-ghost:hover{background:#e2e8f0}
+.actions{display:flex;gap:8px}
+.hint{font-size:10.5px;color:var(--ink3);text-align:center;margin-top:8px}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:100;display:none;
+  align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:12px;padding:28px;width:460px;max-height:80vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-head{font-family:'Playfair Display',serif;font-size:17px;margin-bottom:18px;
+  display:flex;justify-content:space-between;align-items:center}
+.modal-x{background:none;border:none;cursor:pointer;font-size:22px;color:var(--ink3);line-height:1}
+.cl-item{border:1px solid var(--border);border-radius:var(--r);padding:11px 14px;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;transition:.15s}
+.cl-item:hover{background:var(--accent-light);border-color:var(--accent)}
+.cl-item-name{font-weight:600;font-size:13px}
+.cl-item-addr{font-size:11.5px;color:var(--ink2);margin-top:2px}
+.cl-del{background:none;border:none;cursor:pointer;color:var(--ink3);font-size:16px;padding:2px 6px;
+  border-radius:4px;transition:.15s}
+.cl-del:hover{color:var(--danger);background:#fef2f2}
+.modal-sep{border:none;border-top:1px solid var(--border);margin:16px 0}
+.modal-sub{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink2);margin-bottom:12px}
+
+/* doc type toggle */
+.doctype{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:4px}
+.doctype button{flex:1;border:none;background:var(--surface);padding:10px;font-family:'IBM Plex Sans',sans-serif;
+  font-size:12.5px;font-weight:600;color:var(--ink2);cursor:pointer;transition:.15s;letter-spacing:.04em}
+.doctype button.active{background:var(--ink);color:#fff}
+.doctype button:not(.active):hover{background:var(--accent-light);color:var(--accent)}
+
+/* ============ INVOICE PAPER ============ */
+.paper{width:740px;background:#fff;box-shadow:var(--shadow);padding:54px 58px;display:flex;flex-direction:column;min-height:1040px}
+.p-spacer{flex:1 1 auto;min-height:24px}
+.p-bottom{margin-top:auto}
+.stripe{height:4px;background:linear-gradient(90deg,var(--accent),var(--gold));
+  margin:-54px -58px 40px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.p-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:42px}
+.p-name{font-family:'Playfair Display',serif;font-size:26px;line-height:1.15}
+.p-emit{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink2);margin-top:8px;line-height:1.75}
+.p-meta{text-align:right;flex-shrink:0}
+.p-badge{display:inline-block;background:var(--ink);color:#fff;font-size:11px;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;padding:6px 18px;border-radius:3px;margin-bottom:14px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.p-meta-row{font-size:11.5px;color:var(--ink2);line-height:2;display:flex;justify-content:flex-end;gap:14px}
+.p-meta-row b{color:var(--ink);font-weight:500;min-width:74px;text-align:left}
+
+.p-client{background:var(--surface);border-left:3px solid var(--gold);border-radius:0 var(--r) var(--r) 0;
+  padding:18px 22px;margin-bottom:38px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.p-client-lbl{font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px}
+.p-client-name{font-size:15px;font-weight:600}
+.p-client-addr{font-size:12px;color:var(--ink2);margin-top:3px;line-height:1.6}
+
+.p-table{width:100%;border-collapse:collapse;margin-bottom:28px}
+.p-table thead tr{background:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.p-table th{padding:9px 13px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;text-align:left}
+.p-table th:last-child{text-align:right}
+.p-table td{padding:11px 13px;font-size:13px;border-bottom:1px solid var(--border)}
+.p-table td:last-child{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12.5px}
+.p-table tr:last-child td{border-bottom:none}
+
+.p-totals{display:flex;justify-content:flex-end;margin-bottom:0}
+.p-totals-box{width:262px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.p-total{display:flex;justify-content:space-between;padding:10px 16px;font-size:13px;border-bottom:1px solid var(--border)}
+.p-total span{font-family:'IBM Plex Mono',monospace;font-weight:600}
+.p-total.net{background:var(--ink);color:#fff;font-weight:700;font-size:14.5px;border-bottom:none;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.p-pay{background:var(--surface);border-radius:var(--r);padding:18px 22px;margin-bottom:22px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.p-pay-title{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink2);margin-bottom:10px}
+.p-pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 24px;font-size:11.5px;color:var(--ink2);
+  font-family:'IBM Plex Mono',monospace}
+.p-pay-grid .full{grid-column:1/-1}
+.p-pay-grid b{font-family:'IBM Plex Sans',sans-serif;color:var(--ink);font-weight:500}
+
+.p-notes{border-top:1px solid var(--border);padding-top:18px;font-size:10.5px;color:var(--ink3);line-height:1.75}
+.p-notes-title{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:6px}
+
+.p-sign{display:flex;justify-content:flex-end;margin-bottom:26px}
+.p-sign-box{width:280px;border:1px solid var(--border);border-radius:var(--r);padding:16px 18px}
+.p-sign-title{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-bottom:6px}
+.p-sign-hint{font-size:10.5px;color:var(--ink3);line-height:1.6}
+.p-sign-line{height:46px;border-bottom:1px solid var(--border);margin-top:10px}
+
+.preview-tag{width:740px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+
+/* ============ PRINT ============ */
+@media print{
+  @page{margin:14mm;size:A4}
+  body{background:#fff}
+  .app{display:block}
+  .sidebar,.preview-tag{display:none!important}
+  .preview-area{display:block;padding:0;height:auto;overflow:visible}
+  .paper{width:100%;box-shadow:none;padding:0;min-height:calc(297mm - 28mm)}
+  .stripe{margin:0 0 32px}
+}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<!-- ===== MODAL CARNET ===== -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-head">Carnet clients <button class="modal-x" id="modalClose">×</button></div>
+    <div id="clList"></div>
+    <hr class="modal-sep">
+    <div class="modal-sub">Ajouter un client</div>
+    <div class="fg">
+      <div class="f"><label>Nom / Société</label><input id="ncName" placeholder="Au Bureau Amiens"></div>
+      <div class="f"><label>Adresse</label><textarea id="ncAddr" rows="3" placeholder="2 Rue Albert Dauphin&#10;80000 Amiens"></textarea></div>
+      <button class="btn-primary" id="ncSave" style="margin-top:4px">+ Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div style="position:fixed;top:0;left:0;right:0;z-index:200;background:#0f172a;padding:8px 20px;display:flex;align-items:center;gap:16px">
+  <a href="index.html" style="color:#94a3b8;text-decoration:none;font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    Hub
+  </a>
+  <span style="flex:1"></span>
+  <span id="syncStatus" style="font-family:'IBM Plex Sans',sans-serif;font-size:11px;color:#64748b">Chargement…</span>
+</div>
+<div id="syncBar" style="position:fixed;bottom:0;left:0;right:0;z-index:200;background:#fff;border-top:1px solid #e2e8f0;padding:8px 20px;display:flex;align-items:center;justify-content:flex-end;gap:8px;font-family:'IBM Plex Sans',sans-serif;font-size:11.5px;color:#64748b">
+  <span id="syncLabel">Chargement…</span>
+</div>
+<div class="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="s-logo">
+      <div class="s-logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+      <div><div class="s-logo-title">Factures</div><div class="s-logo-sub">Cédric Soubeiga</div></div>
+    </div>
+
+    <!-- EMETTEUR -->
+    <div>
+      <div class="sec-title">Mes informations</div>
+      <div class="fg">
+        <div class="f"><label>Nom</label><input id="emName" value="Cédric Soubeiga"></div>
+        <div class="f"><label>Adresse</label><textarea id="emAddr" rows="2">22c rue du Général Leclerc
+80000 Amiens</textarea></div>
+        <div class="fg2">
+          <div class="f"><label>Téléphone</label><input id="emTel" value="06.11.98.35.96"></div>
+          <div class="f"><label>Email</label><input id="emEmail" value="cedric.soubeiga@gmail.com"></div>
+        </div>
+        <div class="f"><label>SIRET</label><input id="emSiret" value="921 181 350 00015"></div>
+      </div>
+    </div>
+
+    <!-- CLIENT -->
+    <div>
+      <div class="sec-title">Client</div>
+      <div class="client-row">
+        <div class="f"><label>Client enregistré</label>
+          <select id="clSelect"></select>
+        </div>
+        <button class="btn-mini" id="openCarnet">Carnet</button>
+      </div>
+      <div class="fg">
+        <div class="f"><label>Nom / Société</label><input id="clName" placeholder="Au Bureau Amiens"></div>
+        <div class="f"><label>Adresse</label><textarea id="clAddr" rows="2" placeholder="2 Rue Albert Dauphin&#10;80000 Amiens"></textarea></div>
+      </div>
+    </div>
+
+    <!-- DOCUMENT -->
+    <div>
+      <div class="sec-title" id="docSecTitle">Document</div>
+      <div class="doctype">
+        <button id="btnFacture" class="active" type="button">Facture</button>
+        <button id="btnDevis" type="button">Devis</button>
+      </div>
+      <div class="fg2" style="margin-top:12px">
+        <div class="f"><label>Préfixe</label><input id="invPrefix" value="BUR"></div>
+        <div class="f"><label id="lblDate">Date de prestation</label><input id="invDate" type="date"></div>
+      </div>
+      <div class="fg2" style="margin-top:9px">
+        <div class="f" id="boxDue"><label>Échéance</label><input id="invDue" type="date"></div>
+        <div class="f" id="boxValidity" style="display:none"><label>Validité (jours)</label><input id="invValidity" type="number" value="30" min="1"></div>
+        <div class="f"><label>Mode de paiement</label><input id="invMode" value="Chèque ou virement"></div>
+      </div>
+      <div class="f" style="margin-top:9px">
+        <label>Numéro généré (auto)</label>
+        <input id="invNum" readonly>
+      </div>
+    </div>
+
+    <!-- PRESTATIONS -->
+    <div>
+      <div class="sec-title">Prestations</div>
+      <div class="lines-head"><span>Désignation</span><span style="text-align:right">Montant</span><span></span></div>
+      <div id="linesBox"></div>
+      <button class="btn-add" id="addLine">+ Ajouter une ligne</button>
+    </div>
+
+    <!-- BANQUE -->
+    <div>
+      <div class="sec-title">Coordonnées bancaires</div>
+      <div class="fg">
+        <div class="fg2">
+          <div class="f"><label>BIC</label><input id="pBic" value="BOUS FRPP XXX"></div>
+          <div class="f"><label>Banque</label><input id="pBank" value="Crédit Coopératif"></div>
+        </div>
+        <div class="f"><label>IBAN</label><input id="pIban" value="FR76 4061 8803 1100 0408 3354 749"></div>
+        <div class="f"><label>Domiciliation</label><input id="pDom" value="44 rue Traversière, CS 80134, 92772 BOULOGNE-BILLANCOURT CEDEX"></div>
+        <div class="fg2">
+          <div class="f"><label>Titulaire</label><input id="pTit" value="M. SOUBEIGA Cédric"></div>
+          <div class="f"><label>Clé RIB</label><input id="pRib" value="49"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MENTIONS -->
+    <div>
+      <div class="sec-title">Mentions légales</div>
+      <div class="f"><textarea id="invNotes" rows="5">T.V.A non applicable article 293 B du CGI
+
+Le débiteur professionnel des sommes dues à Cédric Soubeiga, qui ne seraient pas réglées à bonne date, est redevable de plein droit d'une indemnité forfaitaire pour frais de recouvrement d'un montant de 40 (quarante) euros (article D441-5 du Code de Commerce).</textarea></div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div>
+      <div class="actions">
+        <button class="btn-primary" id="btnPrint">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Exporter PDF
+        </button>
+        <button class="btn-ghost" id="btnNew">Nouveau</button>
+      </div>
+      <p class="hint">Ctrl+P → Destination « Enregistrer au format PDF »</p>
+    </div>
+  </aside>
+
+  <!-- ===== PREVIEW ===== -->
+  <main class="preview-area">
+    <div class="preview-tag">Aperçu</div>
+    <div class="paper" id="paper"></div>
+  </main>
+</div>
+
+<script>
+"use strict";
+
+// ===== STATE =====
+let lines = [{ desc:'Prestation', amount:200 }];
+let clients = [];
+let docType = 'facture'; // 'facture' | 'devis'
+
+const NOTES_FACTURE = "T.V.A non applicable article 293 B du CGI\n\nLe débiteur professionnel des sommes dues à Cédric Soubeiga, qui ne seraient pas réglées à bonne date, est redevable de plein droit d'une indemnité forfaitaire pour frais de recouvrement d'un montant de 40 (quarante) euros (article D441-5 du Code de Commerce).";
+const NOTES_DEVIS = "T.V.A non applicable article 293 B du CGI\n\nDevis gratuit et sans engagement. Les prix indiqués sont valables pour la durée de validité mentionnée ci-dessus. Toute commande implique l'acceptation des présentes conditions.";
+let notesEdited = false; // track if user manually edited notes
+
+// ===== STORAGE =====
+function loadClients(){
+  try { clients = JSON.parse(localStorage.getItem('cs_clients')||'[]'); }
+  catch(e){ clients = []; }
+  if(!clients.length){
+    clients = [{ id:newId(), name:'Au Bureau Amiens', addr:'2 Rue Albert Dauphin,\n80000 Amiens' }];
+    saveClients();
+  }
+}
+function saveClients(){ localStorage.setItem('cs_clients', JSON.stringify(clients)); }
+function newId(){ return Math.random().toString(36).slice(2,9); }
+
+// ===== HELPERS =====
+function $(id){ return document.getElementById(id); }
+function val(id){ const e=$(id); return e ? e.value : ''; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function br(s){ return esc(s).replace(/\n/g,'<br>'); }
+function euro(n){ return (Number(n)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,' ').replace('.',',')+' €'; }
+
+// ===== DOC TYPE =====
+function setDocType(type){
+  docType = type;
+  const isDevis = type==='devis';
+  document.getElementById('btnFacture').classList.toggle('active', !isDevis);
+  document.getElementById('btnDevis').classList.toggle('active', isDevis);
+  document.getElementById('docSecTitle').textContent = isDevis ? 'Devis' : 'Facture';
+  document.getElementById('lblDate').textContent = isDevis ? 'Date du devis' : 'Date de prestation';
+  document.getElementById('boxDue').style.display = isDevis ? 'none' : 'flex';
+  document.getElementById('boxValidity').style.display = isDevis ? 'flex' : 'none';
+  // swap default prefix only if it's still the other type's default
+  const pfx = document.getElementById('invPrefix');
+  if(isDevis && (pfx.value==='BUR'||pfx.value==='')) pfx.value='DEV';
+  if(!isDevis && pfx.value==='DEV') pfx.value='BUR';
+  // swap notes only if user hasn't manually edited them
+  if(!notesEdited){
+    document.getElementById('invNotes').value = isDevis ? NOTES_DEVIS : NOTES_FACTURE;
+  }
+  buildInvNum();
+  render();
+}
+
+// ===== INVOICE NUMBER =====
+function buildInvNum(){
+  const prefix = (val('invPrefix')||'FAC').toUpperCase().trim();
+  const d = val('invDate');
+  let suffix = '';
+  if(d){ const [y,m,day]=d.split('-'); suffix = y.slice(2)+m+day; }
+  $('invNum').value = suffix ? prefix+'-'+suffix : prefix;
+}
+
+// ===== DATE DISPLAY =====
+function dateFr(iso, fallback){
+  if(!iso) return fallback||'—';
+  const d = new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+}
+
+// ===== LINES =====
+function renderLines(){
+  const box = $('linesBox');
+  box.innerHTML = '';
+  lines.forEach(function(line, i){
+    const row = document.createElement('div');
+    row.className = 'line';
+
+    const desc = document.createElement('input');
+    desc.type='text'; desc.placeholder='Description'; desc.value=line.desc;
+    desc.oninput = function(){ lines[i].desc = desc.value; render(); };
+
+    const amt = document.createElement('input');
+    amt.type='number'; amt.className='amt'; amt.placeholder='0.00';
+    amt.min='0'; amt.step='0.01'; amt.value=line.amount;
+    amt.oninput = function(){ lines[i].amount = parseFloat(amt.value)||0; render(); };
+
+    const del = document.createElement('button');
+    del.className='btn-x'; del.type='button'; del.textContent='×';
+    del.onclick = function(){ lines.splice(i,1); renderLines(); render(); };
+
+    row.appendChild(desc); row.appendChild(amt); row.appendChild(del);
+    box.appendChild(row);
+  });
+}
+
+// ===== CLIENT SELECT =====
+function renderClientSelect(){
+  const sel = $('clSelect');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— Saisie manuelle —</option>';
+  clients.forEach(function(c){
+    const o = document.createElement('option');
+    o.value=c.id; o.textContent=c.name; sel.appendChild(o);
+  });
+  if(cur) sel.value = cur;
+}
+function applyClient(id){
+  const c = clients.find(function(x){ return x.id===id; });
+  if(!c) return;
+  $('clName').value = c.name;
+  $('clAddr').value = c.addr;
+  render();
+}
+
+// ===== CARNET MODAL =====
+function renderCarnet(){
+  const list = $('clList');
+  if(!clients.length){ list.innerHTML='<p style="font-size:12px;color:var(--ink3);text-align:center;padding:6px">Aucun client.</p>'; return; }
+  list.innerHTML='';
+  clients.forEach(function(c){
+    const item = document.createElement('div');
+    item.className='cl-item';
+    item.onclick = function(){
+      renderClientSelect(); $('clSelect').value=c.id; applyClient(c.id); closeModal();
+    };
+    const info = document.createElement('div');
+    info.innerHTML = '<div class="cl-item-name">'+esc(c.name)+'</div><div class="cl-item-addr">'+esc(c.addr).replace(/\n/g,', ')+'</div>';
+    const del = document.createElement('button');
+    del.className='cl-del'; del.textContent='×';
+    del.onclick = function(ev){ ev.stopPropagation(); if(confirm('Supprimer ce client ?')){ clients=clients.filter(function(x){return x.id!==c.id;}); saveClients(); renderClientSelect(); renderCarnet(); } };
+    item.appendChild(info); item.appendChild(del);
+    list.appendChild(item);
+  });
+}
+function openModal(){ renderCarnet(); $('overlay').classList.add('open'); }
+function closeModal(){ $('overlay').classList.remove('open'); }
+
+// ===== RENDER PAPER =====
+function render(){
+  const total = lines.reduce(function(s,l){ return s + (parseFloat(l.amount)||0); }, 0);
+
+  // third meta row depends on doc type
+  let metaThird;
+  if(docType==='devis'){
+    const days = parseInt(val('invValidity'))||30;
+    let validUntil = '';
+    if(val('invDate')){
+      const d = new Date(val('invDate')+'T00:00:00');
+      d.setDate(d.getDate()+days);
+      validUntil = d.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+    }
+    metaThird = '<div class="p-meta-row"><b>Validité</b>'+(validUntil||(days+' jours'))+'</div>';
+  } else {
+    metaThird = '<div class="p-meta-row"><b>Échéance</b>'+dateFr(val('invDue'),'À réception')+'</div>';
+  }
+
+  const rows = lines.map(function(l){
+    return '<tr><td>'+(esc(l.desc)||'<span style="color:#cbd5e1">—</span>')+'</td><td style="text-align:right;color:var(--ink2)">—</td><td>'+euro(l.amount)+'</td></tr>';
+  }).join('');
+
+  const bic=val('pBic'), bank=val('pBank'), iban=val('pIban'), dom=val('pDom'), tit=val('pTit'), rib=val('pRib'), mode=val('invMode');
+  let pay='';
+  if(iban||bic){
+    pay = '<div class="p-pay"><div class="p-pay-title">Coordonnées de paiement</div><div class="p-pay-grid">'
+      + (mode?'<span class="full"><b>Mode :</b> '+esc(mode)+'</span>':'')
+      + (bic?'<span><b>BIC :</b> '+esc(bic)+'</span>':'')
+      + (bank?'<span><b>Banque :</b> '+esc(bank)+'</span>':'')
+      + (iban?'<span class="full"><b>IBAN :</b> '+esc(iban)+'</span>':'')
+      + (dom?'<span class="full"><b>Domiciliation :</b> '+esc(dom)+'</span>':'')
+      + (tit?'<span><b>Titulaire :</b> '+esc(tit)+'</span>':'')
+      + (rib?'<span><b>Clé RIB :</b> '+esc(rib)+'</span>':'')
+      + '</div></div>';
+  }
+
+  const notes = val('invNotes') ? '<div class="p-notes"><div class="p-notes-title">Mentions légales</div>'+br(val('invNotes'))+'</div>' : '';
+
+  const sign = (docType==='devis')
+    ? '<div class="p-sign"><div class="p-sign-box"><div class="p-sign-title">Bon pour accord</div>'
+      + '<div class="p-sign-hint">Date et signature précédées de la mention « Bon pour accord »</div>'
+      + '<div class="p-sign-line"></div></div></div>'
+    : '';
+
+  $('paper').innerHTML =
+    '<div class="stripe"></div>'
+    + '<div class="p-head">'
+      + '<div><div class="p-name">'+esc(val('emName'))+'</div><div class="p-emit">'
+        + br(val('emAddr'))
+        + (val('emTel')?'<br>Tél. : '+esc(val('emTel')):'')
+        + (val('emEmail')?'<br>E-mail : '+esc(val('emEmail')):'')
+        + (val('emSiret')?'<br>SIRET : '+esc(val('emSiret')):'')
+      + '</div></div>'
+      + '<div class="p-meta"><div class="p-badge">'+(docType==='devis'?'Devis':'Facture')+'</div>'
+        + '<div class="p-meta-row"><b>Numéro</b>'+esc(val('invNum'))+'</div>'
+        + '<div class="p-meta-row"><b>Date</b>'+dateFr(val('invDate'))+'</div>'
+        + metaThird
+      + '</div>'
+    + '</div>'
+    + '<div class="p-client"><div class="p-client-lbl">Adressée à</div>'
+      + '<div class="p-client-name">'+(esc(val('clName'))||'—')+'</div>'
+      + '<div class="p-client-addr">'+br(val('clAddr'))+'</div></div>'
+    + '<table class="p-table"><thead><tr>'
+      + '<th style="width:56%">Description</th><th style="width:20%;text-align:right">Quantité</th><th style="width:24%;text-align:right">Montant €</th>'
+      + '</tr></thead><tbody>'+rows+'</tbody></table>'
+    + '<div class="p-totals"><div class="p-totals-box">'
+      + '<div class="p-total"><span style="font-family:IBM Plex Sans,sans-serif;font-weight:400;color:var(--ink2)">Montant total</span><span>'+euro(total)+'</span></div>'
+      + '<div class="p-total net"><span style="font-family:IBM Plex Sans,sans-serif">NET À PAYER</span><span>'+euro(total)+'</span></div>'
+      + '</div></div>'
+    + '<div class="p-spacer"></div>'
+    + '<div class="p-bottom">' + sign + pay + notes + '</div>';
+}
+
+// ===== NEW INVOICE =====
+function newInvoice(){
+  if(!confirm('Nouvelle facture ? La saisie courante sera réinitialisée.')) return;
+  lines = [{ desc:'', amount:0 }];
+  $('clName').value=''; $('clAddr').value=''; $('clSelect').value='';
+  $('invDate').value = new Date().toISOString().split('T')[0];
+  $('invDue').value='';
+  buildInvNum();
+  renderLines();
+  render();
+}
+
+// ===== INIT =====
+const FB_CONFIG = {
+  apiKey: "AIzaSyC9qSli9HAWsM5mcEMjW5fEhgTQmrdR3TA",
+  authDomain: "hub-personnel-firebase.firebaseapp.com",
+  projectId: "hub-personnel-firebase",
+  storageBucket: "hub-personnel-firebase.firebasestorage.app",
+  messagingSenderId: "394129070920",
+  appId: "1:394129070920:web:10f3303c22adcda47cf17d"
+};
+firebase.initializeApp(FB_CONFIG);
+
+function setSyncStatus(msg){
+  const el = document.getElementById('syncLabel');
+  if(el) el.textContent = msg;
+}
+
+function boot(){
+  setSyncStatus('✓ Connecté');
+  loadClients();
+  renderClientSelect();
+  document.getElementById('invDate').value = new Date().toISOString().split('T')[0];
+  buildInvNum();
+  renderLines();
+
+  // bind all static inputs that affect the paper
+  ['emName','emAddr','emTel','emEmail','emSiret','clName','clAddr','invDue','invMode','invValidity',
+   'pBic','pBank','pIban','pDom','pTit','pRib'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', render);
+  });
+  document.getElementById('invNotes').addEventListener('input', function(){ notesEdited = true; render(); });
+  document.getElementById('btnFacture').addEventListener('click', function(){ setDocType('facture'); });
+  document.getElementById('btnDevis').addEventListener('click', function(){ setDocType('devis'); });
+  document.getElementById('invPrefix').addEventListener('input', function(){ buildInvNum(); render(); });
+  document.getElementById('invDate').addEventListener('input', function(){ buildInvNum(); render(); });
+  document.getElementById('clSelect').addEventListener('change', function(){ if(this.value) applyClient(this.value); });
+  document.getElementById('openCarnet').addEventListener('click', openModal);
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('overlay').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+  document.getElementById('ncSave').addEventListener('click', function(){
+    const name=document.getElementById('ncName').value.trim(), addr=document.getElementById('ncAddr').value.trim();
+    if(!name){ alert('Le nom est obligatoire.'); return; }
+    clients.push({ id:newId(), name:name, addr:addr });
+    saveClients();
+    document.getElementById('ncName').value=''; document.getElementById('ncAddr').value='';
+    renderClientSelect(); renderCarnet();
+  });
+  document.getElementById('addLine').addEventListener('click', function(){ lines.push({desc:'',amount:0}); renderLines(); render(); });
+  document.getElementById('btnPrint').addEventListener('click', function(){ window.print(); });
+  document.getElementById('btnNew').addEventListener('click', newInvoice);
+
+  render();
+}
+
+// ── BOOT SEQUENCE ──
+render(); // UI immédiate
+firebase.auth().onAuthStateChanged(function(user){
+  if(!user){
+    window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
+    return;
+  }
+  boot();
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+  // (bindings handled by boot())
+});
+</script>
