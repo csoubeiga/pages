@@ -175,8 +175,9 @@ body{font-family:'IBM Plex Sans',sans-serif;background:#eef2f7;color:var(--ink)}
 @media print{
   @page{margin:14mm;size:A4}
   body{background:#fff}
-  .app{display:block}
+  .app{display:block;margin-top:0!important;margin-bottom:0!important}
   .sidebar,.preview-tag{display:none!important}
+  #hubTopBar,#syncBar{display:none!important}
   .preview-area{display:block;padding:0;height:auto;overflow:visible}
   .paper{width:100%;box-shadow:none;padding:0;min-height:calc(297mm - 28mm)}
   .stripe{margin:0 0 32px}
@@ -203,7 +204,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:#eef2f7;color:var(--ink)}
   </div>
 </div>
 
-<div style="position:fixed;top:0;left:0;right:0;z-index:200;background:#0f172a;padding:8px 20px;display:flex;align-items:center;gap:16px">
+<div id="hubTopBar" style="position:fixed;top:0;left:0;right:0;z-index:200;background:#0f172a;padding:8px 20px;display:flex;align-items:center;gap:16px">
   <a href="index.html" style="color:#94a3b8;text-decoration:none;font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
     Hub
@@ -289,7 +290,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:#eef2f7;color:var(--ink)}
       <div class="fg">
         <div class="fg2">
           <div class="f"><label>BIC</label><input id="pBic" value="BOUS FRPP XXX"></div>
-          <div class="f"><label>Banque</label><input id="pBank" value="Crédit Coopératif"></div>
+          <div class="f"><label>Banque</label><input id="pBank" value="BoursoBank"></div>
         </div>
         <div class="f"><label>IBAN</label><input id="pIban" value="FR76 4061 8803 1100 0408 3354 749"></div>
         <div class="f"><label>Domiciliation</label><input id="pDom" value="44 rue Traversière, CS 80134, 92772 BOULOGNE-BILLANCOURT CEDEX"></div>
