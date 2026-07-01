@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Déclaration d'intention</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAF4EC; --card:#FFFFFF; --ink:#2B2622; --muted:#9A8C7D;
+  --line:#ECE3D6; --terra:#C75B43; --terra-soft:#E8836B; --gold:#E0B15E;
+  --track:#EFE7DA; --good:#3E8E5A;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;padding:0 18px 96px;max-width:620px;margin:0 auto}
+a{color:inherit}
+.topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:16px 0 8px;position:sticky;top:0;background:var(--bg);z-index:5}
+.hub{text-decoration:none;font-weight:600;font-size:15px;color:var(--terra)}
+.year{font-family:'DM Mono',monospace;font-size:14px;color:var(--muted);
+  border:1px solid var(--line);border-radius:8px;padding:3px 9px}
+.hero{text-align:center;padding:22px 6px 26px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.hero-goal{font-family:'DM Serif Display',serif;font-size:25px;line-height:1.25}
+.hero-goal .amt{color:var(--terra)}
+.hero-deadline{font-size:14px;color:var(--muted);margin-top:8px}
+.hero-deadline strong{color:var(--ink);font-weight:600}
+.hero-count{font-family:'DM Mono',monospace;font-size:13px;color:var(--terra);margin-top:12px;letter-spacing:.2px}
+.manifeste-toggle{margin-top:14px;background:none;border:none;color:var(--muted);
+  font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:4px}
+.manifeste{margin-top:10px;text-align:left;background:#FBF1E8;border:1px solid var(--line);
+  border-radius:12px;padding:16px 18px}
+.manifeste p{margin:0;font-size:14px;line-height:1.6;color:#5a4f44}
+.manifeste em{font-family:'DM Serif Display',serif;font-style:italic;color:var(--terra)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:16px}
+.card-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.card-head h2{margin:0;font-size:17px;font-weight:600;flex:1}
+.pill{font-family:'DM Mono',monospace;font-size:12px;color:var(--terra);
+  background:#FBEAE3;border-radius:7px;padding:3px 7px;min-width:26px;text-align:center}
+/* Summary (toujours visible) */
+.bar-val{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.bar-val>span:first-child{font-family:'DM Serif Display',serif;font-size:26px}
+.bar-obj{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)}
+.track{position:relative;height:14px;background:var(--track);border-radius:99px;overflow:hidden;display:flex}
+.seg{height:100%;transition:width .35s ease}
+.seg.salaire{background:var(--terra)} .seg.cgp{background:var(--terra-soft)} .seg.autres{background:var(--gold)}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,var(--terra-soft),var(--terra));transition:width .35s ease}
+.fill.done{background:linear-gradient(90deg,#5BB37D,var(--good))}
+.bar-cap{font-size:12px;color:var(--muted);margin-top:8px}
+.rev-left{font-size:13px;font-weight:600;color:var(--terra);margin-top:9px}
+.rev-left.done{color:var(--good)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--muted)}
+.legend .dot{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:middle}
+.legend b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+/* Toggle saisie */
+.saisie-toggle{margin-top:14px;width:100%;background:#FBF6EF;border:1px solid var(--line);
+  border-radius:10px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;
+  font-weight:600;padding:9px;cursor:pointer}
+.saisie-toggle.open{color:var(--terra)}
+.saisie-body{margin-top:14px}
+label{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px}
+label.full{margin-bottom:12px}
+input,select{width:100%;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--ink);
+  background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;outline:none;-webkit-appearance:none}
+input:focus,select:focus{border-color:var(--terra-soft)}
+.field-inline{display:grid;grid-template-columns:1fr 90px;gap:10px;align-items:end}
+.field-inline label{margin-bottom:0}
+/* Bloc calcul CGP */
+.sep{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--terra);
+  font-weight:700;margin:16px 0 10px;border-top:1px solid var(--line);padding-top:14px}
+.calc{background:#FBF1E8;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:13px}
+.calc .r{display:flex;justify-content:space-between;padding:3px 0;color:#6a5f53}
+.calc .r b{font-variant-numeric:tabular-nums;font-weight:500}
+.calc .r.tot{border-top:1px solid var(--line);margin-top:5px;padding-top:7px;color:var(--ink);font-weight:600}
+.calc .r.tot b{color:var(--good);font-weight:700}
+/* Accordéon générique */
+.acc-head{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;
+  cursor:pointer;padding:0;text-align:left;color:var(--ink)}
+.acc-head h2{margin:0;font-size:17px;font-weight:600;flex:1}
+.chev{color:var(--muted);transition:transform .2s}
+.acc-head.open .chev{transform:rotate(180deg)}
+.acc-body{margin-top:16px}
+.add-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:14px}
+.add-row input,.add-row select{font-size:15px;padding:10px}
+.btn{background:var(--terra);color:#fff;border:none;border-radius:10px;font-weight:600;
+  font-size:14px;padding:0 14px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.btn:active{opacity:.85}
+.group{margin-top:14px}
+.group h3{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 8px;font-weight:700}
+.member-list,.biens-list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:10px;background:#FBF6EF;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.row .main{flex:1;min-width:0}
+.row .name{font-weight:600;font-size:14px}
+.row .meta{font-size:12px;color:var(--muted);margin-top:2px}
+.row .pv{font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
+.row .pv.pos{color:var(--good)} .row .pv.neg{color:var(--terra)}
+.del{background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:2px 4px;line-height:1}
+.del:active{color:var(--terra)}
+.empty{font-size:13px;color:var(--muted);font-style:italic;padding:4px 2px}
+.add-row.bien{grid-template-columns:1fr 1fr}
+.add-row.bien #bien-nom,.add-row.bien .btn{grid-column:1 / -1}
+/* Projection */
+.chart-wrap{margin-top:6px}
+.chart-wrap svg{width:100%;height:auto;display:block}
+.chart-cap{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center}
+.chart-cap b{color:var(--ink);font-weight:600}
+.cfg-sub{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700;margin:6px 0 10px}
+.syncbar{position:fixed;left:0;right:0;bottom:0;text-align:center;font-size:13px;
+  font-family:'DM Mono',monospace;padding:10px;background:#fff;border-top:1px solid var(--line);color:var(--muted);z-index:10}
+.syncbar.ok{color:var(--good)} .syncbar.err{color:var(--terra)} .syncbar.saving{color:var(--terra-soft)}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="hub" href="index.html">← Hub</a>
+  <span class="year" id="yearLabel">—</span>
+</header>
+<section class="hero">
+  <div class="hero-goal"><span class="amt">5 000 €</span> / mois · <span class="amt">300 000 €</span> en bourse</div>
+  <div class="hero-deadline">à posséder d'ici le <strong>1ᵉʳ septembre 2035</strong></div>
+  <div class="hero-count" id="countdown">…</div>
+  <button class="manifeste-toggle" id="manifesteToggle">Voir la déclaration ▾</button>
+  <div class="manifeste" id="manifeste" hidden>
+    <p>La somme exacte que je désire est <em>5 000 € nets par mois et 300 k€ en bourse</em>.
+    J'ai l'intention de donner Rigueur, Temps et Énergie en échange de ce que je désire.
+    D'orienter mes choix comme un athlète de haut niveau. Je suis prêt à accepter l'inconfort
+    et la souffrance pour y arriver. J'ai l'intention de posséder cet argent d'ici le 1ᵉʳ septembre 2035.<br><br>
+    Mon plan d'action : générer 42 000 € net/an · placer 18 k€/an sur le PEA ·
+    monter une équipe d'invest · réaliser 100 k€ de PV immo (LH, OT, flips).<br><br>
+    <em>Je m'y engage et j'y arriverai.</em></p>
+  </div>
+</section>
+<!-- 01 REVENUS -->
+<section class="card">
+  <div class="card-head"><span class="pill">01</span><h2>Revenus de l'année</h2></div>
+  <div class="bar-val"><span id="rev-total">0 €</span><span class="bar-obj" id="rev-pct">—</span></div>
+  <div class="track">
+    <div class="seg salaire" id="seg-salaire"></div>
+    <div class="seg cgp" id="seg-cgp"></div>
+    <div class="seg autres" id="seg-autres"></div>
+  </div>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--terra)"></span>Salaire <b id="lg-sal">0 €</b></span>
+    <span><span class="dot" style="background:var(--terra-soft)"></span>CGP <b id="lg-cgp">0 €</b></span>
+    <span><span class="dot" style="background:var(--gold)"></span>Autres <b id="lg-aut">0 €</b></span>
+  </div>
+  <div class="rev-left" id="rev-left">—</div>
+  <div class="bar-cap" id="rev-cap">—</div>
+  <button class="saisie-toggle" data-target="rev-saisie">Saisie ▾</button>
+  <div class="saisie-body" id="rev-saisie" hidden>
+    <label class="full">Salaire net (€/an)<input id="rev-salaire" type="number" inputmode="decimal" placeholder="34000"></label>
+    <div class="sep">CGP — net net calculé</div>
+    <label class="full">CA intermédié (€/an)<input id="rev-cgpca" type="number" inputmode="decimal" placeholder="0"></label>
+    <div class="field-inline"><label class="full">Part mandataire (%)<input id="rev-part" type="number" inputmode="decimal" placeholder="40"></label></div>
+    <div class="calc">
+      <div class="r">Commission <b id="cgp-comm">0 €</b></div>
+      <div class="r">− URSSAF <b id="cgp-urssaf">0 €</b></div>
+      <div class="r">− IR <b id="cgp-ir">0 €</b></div>
+      <div class="r tot">Net net CGP <b id="cgp-net">0 €</b></div>
+    </div>
+    <div class="sep">Autres</div>
+    <label class="full">Autres revenus nets (€/an)<input id="rev-autres" type="number" inputmode="decimal" placeholder="0"></label>
+  </div>
+</section>
+<!-- 02 BOURSE -->
+<section class="card">
+  <div class="card-head"><span class="pill">02</span><h2>Bourse — placé cette année</h2></div>
+  <div class="bar-val"><span id="pea-val">0 €</span><span class="bar-obj" id="pea-pct">—</span></div>
+  <div class="track"><div class="fill" id="bar-pea"></div></div>
+  <button class="saisie-toggle" data-target="pea-saisie">Saisie ▾</button>
+  <div class="saisie-body" id="pea-saisie" hidden>
+    <label class="full">Montant placé cette année (€)<input id="pea-place" type="number" inputmode="decimal" placeholder="0"></label>
+  </div>
+</section>
+<!-- 03 EQUIPE -->
+<section class="card">
+  <button class="acc-head" id="eqToggle"><span class="pill">03</span><h2>Équipe d'invest</h2><span class="chev">▾</span></button>
+  <div class="acc-body" id="eqBody" hidden>
+    <div class="add-row">
+      <input id="eq-nom" placeholder="Nom">
+      <input id="eq-fonction" placeholder="Fonction">
+      <select id="eq-groupe"><option value="fiables">Fiable</option><option value="info">Pour info</option></select>
+      <button id="eq-add" class="btn">+</button>
+    </div>
+    <div class="group"><h3>Fiables / récurrents</h3><div id="eq-list-fiables" class="member-list"></div></div>
+    <div class="group"><h3>Moins fiables / pour info</h3><div id="eq-list-info" class="member-list"></div></div>
+  </div>
+</section>
+<!-- 04 PV IMMO -->
+<section class="card">
+  <div class="card-head"><span class="pill">04</span><h2>Plus-value immobilière</h2></div>
+  <div class="bar-val"><span id="pv-total">0 €</span><span class="bar-obj" id="pv-pct">—</span></div>
+  <div class="track"><div class="fill" id="bar-pvimmo"></div></div>
+  <div class="bar-cap">PV latente = somme des (valeur actuelle − prix d'achat)</div>
+  <button class="saisie-toggle" data-target="pv-saisie">Saisie ▾</button>
+  <div class="saisie-body" id="pv-saisie" hidden>
+    <div class="add-row bien">
+      <input id="bien-nom" placeholder="Bien (ex. T2 Amiens)">
+      <input id="bien-valeur" type="number" inputmode="decimal" placeholder="Valeur actuelle">
+      <input id="bien-achat" type="number" inputmode="decimal" placeholder="Prix d'achat">
+      <button id="bien-add" class="btn">+ Ajouter le bien</button>
+    </div>
+    <div id="biens-list" class="biens-list"></div>
+  </div>
+</section>
+<!-- PROJECTION -->
+<section class="card">
+  <div class="card-head"><span class="pill">📈</span><h2>Projection bourse · 7 %/an</h2></div>
+  <div class="chart-wrap" id="chart"></div>
+  <div class="chart-cap" id="chart-cap">—</div>
+</section>
+<!-- REGLAGES -->
+<section class="card">
+  <button class="acc-head" id="cfgToggle"><span class="pill">⚙</span><h2>Objectifs & réglages</h2><span class="chev">▾</span></button>
+  <div class="acc-body" id="cfgBody" hidden>
+    <div class="cfg-sub">Objectifs annuels & cibles</div>
+    <label class="full">Objectif revenus / an (€)<input id="obj-revenus" type="number" inputmode="decimal"></label>
+    <label class="full">Objectif placé / an (€)<input id="obj-pea" type="number" inputmode="decimal"></label>
+    <label class="full">Objectif PV immo (€)<input id="obj-pvimmo" type="number" inputmode="decimal"></label>
+    <label class="full">Cible capital bourse (€)<input id="obj-capital" type="number" inputmode="decimal"></label>
+    <label class="full">Revenu mensuel ultime / horizon (€)<input id="obj-revmensuel" type="number" inputmode="decimal"></label>
+    <div class="cfg-sub">Paramètres CGP</div>
+    <label class="full">Taux URSSAF (% du CA)<input id="param-urssaf" type="number" inputmode="decimal"></label>
+    <label class="full">TMI — taux marginal IR (%)<input id="param-tmi" type="number" inputmode="decimal"></label>
+    <label class="full">Abattement micro-BNC (%)<input id="param-abat" type="number" inputmode="decimal"></label>
+    <div class="cfg-sub">Projection bourse</div>
+    <label class="full">Capital de départ (€)<input id="param-depart" type="number" inputmode="decimal"></label>
+    <label class="full">Versement annuel (€)<input id="param-vers" type="number" inputmode="decimal"></label>
+    <label class="full">Rendement annuel (%)<input id="param-rdt" type="number" inputmode="decimal"></label>
+  </div>
+</section>
+<div class="syncbar" id="syncbar">Chargement…</div>
+<script>
+/* ===== Config Firebase ===== */
+const FB_CONFIG={
+  apiKey:"AIzaSyC9qSli9HAWsM5mcEMjW5fEhgTQmrdR3TA",
+  authDomain:"hub-personnel-firebase.firebaseapp.com",
+  projectId:"hub-personnel-firebase",
+  storageBucket:"hub-personnel-firebase.firebasestorage.app",
+  messagingSenderId:"394129070920",
+  appId:"1:394129070920:web:10f3303c22adcda47cf17d"
+};
+let DB=null;
+try{ firebase.initializeApp(FB_CONFIG); DB=firebase.firestore(); }catch(e){ DB=null; }
+const DOC = DB ? DB.collection('declaration-intention').doc('data') : null;
+/* ===== Etat ===== */
+const LS_KEY='di_v2_data';
+const YEAR=new Date().getFullYear();
+const K_SAL='rev:'+YEAR+':salaire', K_CGPCA='rev:'+YEAR+':cgpCA', K_AUT='rev:'+YEAR+':autres', K_PEA='pea:'+YEAR+':place';
+let DATA={};
+let saveTimer=null, retryTimer=null;
+/* ===== Helpers ===== */
+function el(id){ return document.getElementById(id); }
+function g(key,def){ const v=DATA[key]; const n=Number(v);
+  return (v===undefined||v===null||v===''||isNaN(n)) ? (def===undefined?0:def) : n; }
+function fmt(n){ return Math.round(n).toLocaleString('fr-FR')+' €'; }
+function fmtk(n){ return Math.round(n/1000)+' k€'; }
+function clampPct(p){ return Math.max(0,Math.min(100,p)); }
+function parseField(raw){ const t=(raw||'').trim(); if(t==='') return null;
+  const x=parseFloat(t.replace(',','.')); return isNaN(x)?null:x; }
+/* ===== Statut sync ===== */
+function setStatus(s){ const b=el('syncbar'); b.className='syncbar';
+  if(s==='loading') b.textContent='Chargement…';
+  else if(s==='saving'){ b.textContent='Sauvegarde…'; b.classList.add('saving'); }
+  else if(s==='ok'){ b.textContent='✓ Synchronisé'; b.classList.add('ok'); }
+  else if(s==='error'){ b.textContent='⚠ Erreur réseau · nouvel essai…'; b.classList.add('err'); }
+  else if(s==='local') b.textContent='● Hors-ligne (local)';
+}
+/* ===== Sauvegarde ===== */
+function scheduleSave(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveData,1200); }
+function saveData(){
+  try{ localStorage.setItem(LS_KEY,JSON.stringify(DATA)); }catch(e){}
+  if(!DOC){ setStatus('local'); return; }
+  setStatus('saving');
+  DOC.set(DATA).then(function(){ setStatus('ok'); if(retryTimer){clearTimeout(retryTimer);retryTimer=null;} })
+  .catch(function(){ setStatus('error'); scheduleRetry(); });
+}
+function scheduleRetry(){ if(retryTimer) return; retryTimer=setTimeout(function(){ retryTimer=null; saveData(); },5000); }
+/* ===== Chargement ===== */
+async function loadData(){
+  setStatus('loading');
+  try{ const ls=localStorage.getItem(LS_KEY); if(ls) DATA=JSON.parse(ls)||{}; }catch(e){ DATA={}; }
+  if(DOC){
+    try{ const snap=await DOC.get();
+      if(snap.exists){ DATA=snap.data()||{}; try{ localStorage.setItem(LS_KEY,JSON.stringify(DATA)); }catch(e){} }
+      setStatus('ok');
+    }catch(err){ setStatus('error'); }
+  } else setStatus('local');
+}
+/* ===== Calcul CGP ===== */
+function cgpNetNet(){
+  const ca=g(K_CGPCA);
+  const part=g('param:partMandataire',40)/100;
+  const commission=ca*part;
+  const urssaf=commission*g('param:urssaf',25.6)/100;
+  const baseIR=commission*(1-g('param:abattement',34)/100);
+  const ir=baseIR*g('param:tmi',30)/100;
+  const net=Math.max(0,commission-urssaf-ir);
+  return {commission:commission,urssaf:urssaf,ir:ir,net:net};
+}
+/* ===== Hydratation inputs ===== */
+function setVal(id,key,def){ const v=DATA[key];
+  el(id).value=(v===undefined||v===null||v==='') ? (def===undefined?'':def) : v; }
+function hydrateInputs(){
+  el('yearLabel').textContent=YEAR;
+  setVal('rev-salaire',K_SAL); setVal('rev-cgpca',K_CGPCA); setVal('rev-autres',K_AUT);
+  setVal('rev-part','param:partMandataire',40);
+  setVal('pea-place',K_PEA);
+  setVal('obj-revenus','obj:revenus',42000); setVal('obj-pea','obj:pea',18000);
+  setVal('obj-pvimmo','obj:pvimmo',100000); setVal('obj-capital','obj:capital',300000);
+  setVal('obj-revmensuel','obj:revmensuel',5000);
+  setVal('param-urssaf','param:urssaf',25.6); setVal('param-tmi','param:tmi',30); setVal('param-abat','param:abattement',34);
+  setVal('param-depart','param:capitalDepart',0); setVal('param-vers','param:versementAnnuel',g('obj:pea',18000)); setVal('param-rdt','param:rendement',7);
+}
+/* ===== Recompute ===== */
+function setSeg(id,pct){ el(id).style.width=Math.max(0,pct)+'%'; }
+function setFill(id,pct){ const f=el(id); f.style.width=clampPct(pct)+'%'; f.classList.toggle('done',pct>=100); }
+function recompute(){
+  /* Revenus */
+  const sal=g(K_SAL), aut=g(K_AUT), cgp=cgpNetNet();
+  const tot=sal+cgp.net+aut;
+  const obj=g('obj:revenus',42000);
+  setSeg('seg-salaire', obj>0?sal/obj*100:0);
+  setSeg('seg-cgp', obj>0?cgp.net/obj*100:0);
+  setSeg('seg-autres', obj>0?aut/obj*100:0);
+  el('rev-total').textContent=fmt(tot);
+  el('rev-pct').textContent=Math.round(obj>0?tot/obj*100:0)+' % de '+fmt(obj);
+  el('lg-sal').textContent=fmt(sal); el('lg-cgp').textContent=fmt(cgp.net); el('lg-aut').textContent=fmt(aut);
+  const ultMois=g('obj:revmensuel',5000);
+  el('rev-cap').textContent='soit '+fmt(tot/12)+'/mois · horizon 2035 : '+fmt(ultMois*12)+'/an ('+fmt(ultMois)+'/mois)';
+  const left=obj-tot;
+  const rl=el('rev-left'); rl.classList.toggle('done',left<=0);
+  rl.textContent = left>0 ? 'Reste '+fmt(left)+' pour atteindre l’objectif' : 'Objectif dépassé de '+fmt(-left)+' 🎯';
+  el('cgp-comm').textContent=fmt(cgp.commission); el('cgp-urssaf').textContent=fmt(cgp.urssaf);
+  el('cgp-ir').textContent=fmt(cgp.ir); el('cgp-net').textContent=fmt(cgp.net);
+  /* PEA placé */
+  const objPea=g('obj:pea',18000), pea=g(K_PEA);
+  setFill('bar-pea', objPea>0?pea/objPea*100:0);
+  el('pea-val').textContent=fmt(pea);
+  el('pea-pct').textContent=Math.round(objPea>0?pea/objPea*100:0)+' % de '+fmt(objPea);
+  /* PV immo */
+  const objPv=g('obj:pvimmo',100000);
+  const biens=Array.isArray(DATA['biens'])?DATA['biens']:[];
+  let pv=0; biens.forEach(function(b){ pv+=(Number(b.valeur)||0)-(Number(b.achat)||0); });
+  setFill('bar-pvimmo', objPv>0?pv/objPv*100:0);
+  el('pv-total').textContent=fmt(pv);
+  el('pv-pct').textContent=Math.round(objPv>0?pv/objPv*100:0)+' % de '+fmt(objPv);
+  buildChart();
+}
+/* ===== Projection ===== */
+function buildChart(){
+  const start=YEAR, end=2035;
+  const r=g('param:rendement',7)/100;
+  const vers=g('param:versementAnnuel',g('obj:pea',18000));
+  const target=g('obj:capital',300000);
+  let cap=g('param:capitalDepart',0);
+  const pts=[{y:start,v:cap}];
+  for(let y=start+1;y<=end;y++){ cap=cap*(1+r)+vers; pts.push({y:y,v:cap}); }
+  const finalV=pts[pts.length-1].v;
+  const maxV=Math.max(target,finalV)*1.12 || 1;
+  const W=320,H=192,padL=12,padR=12,padT=18,padB=34;
+  const pw=W-padL-padR, ph=H-padT-padB, baseY=padT+ph;
+  const X=function(i){ return padL+pw*(i/(pts.length-1)); };
+  const Y=function(v){ return padT+ph*(1-v/maxV); };
+  let line='', area='M'+X(0).toFixed(1)+' '+baseY.toFixed(1)+' ';
+  pts.forEach(function(p,i){ const c=X(i).toFixed(1)+' '+Y(p.v).toFixed(1); line+=(i===0?'M':'L')+c+' '; area+='L'+c+' '; });
+  area+='L'+X(pts.length-1).toFixed(1)+' '+baseY.toFixed(1)+' Z';
+  const ty=Y(target);
+  let crossIdx=-1; for(let i=0;i<pts.length;i++){ if(pts[i].v>=target){ crossIdx=i; break; } }
+  const reached = crossIdx>=0 ? pts[crossIdx].y : null;
+  let svg='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+  svg+='<line x1="'+padL+'" y1="'+baseY+'" x2="'+(W-padR)+'" y2="'+baseY+'" stroke="#ECE3D6" stroke-width="1"/>';
+  svg+='<line x1="'+padL+'" y1="'+ty.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+ty.toFixed(1)+'" stroke="#C75B43" stroke-width="1" stroke-dasharray="4 4" opacity="0.6"/>';
+  svg+='<text x="'+(W-padR)+'" y="'+(ty-4).toFixed(1)+'" text-anchor="end" font-family="DM Mono,monospace" font-size="9" fill="#C75B43">cible '+fmtk(target)+'</text>';
+  svg+='<path d="'+area+'" fill="#E8836B" opacity="0.12"/>';
+  svg+='<path d="'+line+'" fill="none" stroke="#C75B43" stroke-width="2.2" stroke-linejoin="round"/>';
+  if(crossIdx>=0){
+    const cx=X(crossIdx), cy=Y(pts[crossIdx].v);
+    svg+='<line x1="'+cx.toFixed(1)+'" y1="'+baseY+'" x2="'+cx.toFixed(1)+'" y2="'+cy.toFixed(1)+'" stroke="#3E8E5A" stroke-width="1.2" stroke-dasharray="3 3"/>';
+    svg+='<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="4" fill="#3E8E5A"/>';
+    const anc=crossIdx<=1?'start':(crossIdx>=pts.length-2?'end':'middle');
+    svg+='<text x="'+cx.toFixed(1)+'" y="'+(cy-8).toFixed(1)+'" text-anchor="'+anc+'" font-family="DM Sans,sans-serif" font-weight="700" font-size="11" fill="#3E8E5A">🎯 '+pts[crossIdx].y+'</text>';
+  }
+  svg+='<circle cx="'+X(pts.length-1).toFixed(1)+'" cy="'+Y(finalV).toFixed(1)+'" r="3.2" fill="#C75B43"/>';
+  if(crossIdx!==pts.length-1){
+    svg+='<text x="'+(X(pts.length-1)-2).toFixed(1)+'" y="'+(Y(finalV)-6).toFixed(1)+'" text-anchor="end" font-family="DM Mono,monospace" font-size="9.5" fill="#2B2622">'+fmtk(finalV)+'</text>';
+  }
+  pts.forEach(function(p,i){
+    const isCross=(i===crossIdx);
+    svg+='<text x="'+X(i).toFixed(1)+'" y="'+(H-14)+'" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="'+(isCross?'#3E8E5A':'#9A8C7D')+'" font-weight="'+(isCross?'600':'400')+'">’'+(p.y%100)+'</text>';
+  });
+  svg+='</svg>';
+  el('chart').innerHTML=svg;
+  el('chart-cap').innerHTML= reached
+    ? 'Objectif <b>'+fmtk(target)+'</b> dépassé en <b>'+reached+'</b> · projection 2035 : <b>'+fmt(finalV)+'</b>'
+    : 'Projection 2035 : <b>'+fmt(finalV)+'</b> · soit <b>'+Math.round(finalV/target*100)+' %</b> de la cible';
+}
+/* ===== Equipe ===== */
+function memberRow(m,index){
+  const row=document.createElement('div'); row.className='row';
+  const main=document.createElement('div'); main.className='main';
+  const name=document.createElement('div'); name.className='name'; name.textContent=m.nom||'—';
+  main.appendChild(name);
+  if(m.fonction){ const meta=document.createElement('div'); meta.className='meta'; meta.textContent=m.fonction; main.appendChild(meta); }
+  const del=document.createElement('button'); del.className='del'; del.textContent='✕'; del.onclick=function(){ delEquipe(index); };
+  row.appendChild(main); row.appendChild(del); return row;
+}
+function renderEquipe(){
+  const list=Array.isArray(DATA['equipe'])?DATA['equipe']:[];
+  const f=el('eq-list-fiables'), i=el('eq-list-info'); f.innerHTML=''; i.innerHTML='';
+  let nf=0,ni=0;
+  list.forEach(function(m,index){ if(m.groupe==='info'){ i.appendChild(memberRow(m,index)); ni++; } else { f.appendChild(memberRow(m,index)); nf++; } });
+  if(nf===0){ const e=document.createElement('div'); e.className='empty'; e.textContent="Personne pour l'instant."; f.appendChild(e); }
+  if(ni===0){ const e=document.createElement('div'); e.className='empty'; e.textContent="Personne pour l'instant."; i.appendChild(e); }
+}
+function addEquipe(){
+  const nom=el('eq-nom').value.trim(), fonction=el('eq-fonction').value.trim(), groupe=el('eq-groupe').value;
+  if(!nom){ el('eq-nom').focus(); return; }
+  if(!Array.isArray(DATA['equipe'])) DATA['equipe']=[];
+  DATA['equipe'].push({nom:nom,fonction:fonction,groupe:groupe});
+  el('eq-nom').value=''; el('eq-fonction').value=''; scheduleSave(); renderEquipe();
+}
+function delEquipe(index){ if(!Array.isArray(DATA['equipe'])) return; DATA['equipe'].splice(index,1); scheduleSave(); renderEquipe(); }
+/* ===== Biens ===== */
+function bienRow(b,index){
+  const pvVal=(Number(b.valeur)||0)-(Number(b.achat)||0);
+  const row=document.createElement('div'); row.className='row';
+  const main=document.createElement('div'); main.className='main';
+  const name=document.createElement('div'); name.className='name'; name.textContent=b.nom||'—';
+  const meta=document.createElement('div'); meta.className='meta'; meta.textContent=fmt(Number(b.valeur)||0)+' − '+fmt(Number(b.achat)||0);
+  main.appendChild(name); main.appendChild(meta);
+  const pv=document.createElement('div'); pv.className='pv '+(pvVal>=0?'pos':'neg'); pv.textContent=(pvVal>=0?'+':'')+fmt(pvVal);
+  const del=document.createElement('button'); del.className='del'; del.textContent='✕'; del.onclick=function(){ delBien(index); };
+  row.appendChild(main); row.appendChild(pv); row.appendChild(del); return row;
+}
+function renderBiens(){
+  const list=Array.isArray(DATA['biens'])?DATA['biens']:[];
+  const c=el('biens-list'); c.innerHTML='';
+  if(list.length===0){ const e=document.createElement('div'); e.className='empty'; e.textContent='Aucun bien ajouté.'; c.appendChild(e); return; }
+  list.forEach(function(b,index){ c.appendChild(bienRow(b,index)); });
+}
+function addBien(){
+  const nom=el('bien-nom').value.trim(), valeur=parseField(el('bien-valeur').value), achat=parseField(el('bien-achat').value);
+  if(!nom){ el('bien-nom').focus(); return; }
+  if(!Array.isArray(DATA['biens'])) DATA['biens']=[];
+  DATA['biens'].push({nom:nom,valeur:valeur||0,achat:achat||0});
+  el('bien-nom').value=''; el('bien-valeur').value=''; el('bien-achat').value=''; scheduleSave(); renderBiens(); recompute();
+}
+function delBien(index){ if(!Array.isArray(DATA['biens'])) return; DATA['biens'].splice(index,1); scheduleSave(); renderBiens(); recompute(); }
+/* ===== Countdown ===== */
+function renderCountdown(){
+  const target=new Date(2035,8,1), now=new Date();
+  const days=Math.max(0,Math.ceil((target-now)/86400000));
+  el('countdown').textContent=days.toLocaleString('fr-FR')+' jours restants · '+(days/365.25).toFixed(1)+' ans';
+}
+function render(){ hydrateInputs(); renderEquipe(); renderBiens(); recompute(); renderCountdown(); }
+/* ===== Câblage ===== */
+function bind(id,key){
+  const node=el(id);
+  node.oninput=function(){ const v=parseField(node.value);
+    if(v===null) delete DATA[key]; else DATA[key]=v; scheduleSave(); recompute(); };
+}
+function toggleHidden(btn,body){ const hid=body.hasAttribute('hidden');
+  if(hid) body.removeAttribute('hidden'); else body.setAttribute('hidden',''); btn.classList.toggle('open',hid); return hid; }
+function wire(){
+  bind('rev-salaire',K_SAL); bind('rev-cgpca',K_CGPCA); bind('rev-autres',K_AUT);
+  bind('rev-part','param:partMandataire'); bind('pea-place',K_PEA);
+  bind('obj-revenus','obj:revenus'); bind('obj-pea','obj:pea'); bind('obj-pvimmo','obj:pvimmo');
+  bind('obj-capital','obj:capital'); bind('obj-revmensuel','obj:revmensuel');
+  bind('param-urssaf','param:urssaf'); bind('param-tmi','param:tmi'); bind('param-abat','param:abattement');
+  bind('param-depart','param:capitalDepart'); bind('param-vers','param:versementAnnuel'); bind('param-rdt','param:rendement');
+  el('eq-add').onclick=addEquipe; el('bien-add').onclick=addBien;
+  /* toggles saisie (barre toujours visible, inputs repliés) */
+  const toggles=document.querySelectorAll('.saisie-toggle');
+  toggles.forEach(function(t){ t.onclick=function(){ const body=el(t.getAttribute('data-target')); const hid=toggleHidden(t,body); t.textContent=hid?'Masquer ▴':'Saisie ▾'; }; });
+  /* accordéons équipe / réglages */
+  const eqB=el('eqBody'), eqT=el('eqToggle'); eqT.onclick=function(){ toggleHidden(eqT,eqB); };
+  const cfB=el('cfgBody'), cfT=el('cfgToggle'); cfT.onclick=function(){ toggleHidden(cfT,cfB); };
+  /* manifeste */
+  const mt=el('manifesteToggle'), man=el('manifeste');
+  mt.onclick=function(){ const hid=man.hasAttribute('hidden');
+    if(hid){ man.removeAttribute('hidden'); mt.textContent='Masquer la déclaration ▴'; }
+    else { man.setAttribute('hidden',''); mt.textContent='Voir la déclaration ▾'; } };
+}
+/* ===== Boot ===== */
+wire();
+render();
+function boot(){ (async function(){ await loadData(); render(); })(); }
+if(DB && firebase.auth){
+  firebase.auth().onAuthStateChanged(function(user){
+    if(!user){ window.location.href='login.html?redirect='+encodeURIComponent(window.location.pathname); return; }
+    boot();
+  });
+} else { boot(); }
+</script>
+</body>
+</html>
